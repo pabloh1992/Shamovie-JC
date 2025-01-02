@@ -11,13 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.pablodev.shamovie.core.data.HttpClientFactory
 import com.pablodev.shamovie.core.domain.onError
 import com.pablodev.shamovie.core.domain.onSuccess
-import com.pablodev.shamovie.media.data.network.KtorRemoteMediaDataSource
-import com.pablodev.shamovie.media.data.repository.DefaultMediaRepository
+import com.pablodev.shamovie.media.domain.MediaRepository
 import com.pablodev.shamovie.ui.theme.ShamovieTheme
-import io.ktor.client.engine.cio.CIO
+import org.koin.android.ext.android.get
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,11 +25,7 @@ class MainActivity : ComponentActivity() {
 
             val TAG = "MainActivity"
 
-            val repository = DefaultMediaRepository(
-                remoteMediaDataSource = KtorRemoteMediaDataSource(
-                    httpClient = HttpClientFactory.create(engine = CIO)
-                )
-            )
+            val repository : MediaRepository = get()
 
             // Launch repository call in lifecycleScope
             LaunchedEffect(Unit) {
