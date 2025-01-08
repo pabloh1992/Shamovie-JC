@@ -36,6 +36,7 @@ class DiscoverViewModel(
                     it.copy(
                         isListening = false,
                         isLoading = true,
+                        query = action.query
                     )
                 }
             }
@@ -51,6 +52,9 @@ class DiscoverViewModel(
                 _state.update {
                     it.copy(
                         mediaResult = null,
+                        errorMessage = null,
+                        query = null,
+                        noResults = false
                     )
                 }
             }
@@ -81,7 +85,8 @@ class DiscoverViewModel(
                         it.copy(
                             isListening = false,
                             isLoading = false,
-                            errorMessage = UiText.DynamicString("No results found for $query")
+                            errorMessage = UiText.DynamicString("No results found for $query"),
+                            noResults = true
                         )
                     }
                 }
@@ -91,7 +96,7 @@ class DiscoverViewModel(
                     it.copy(
                         isListening = false,
                         isLoading = false,
-                        errorMessage = error.toUiText()
+                        errorMessage = error.toUiText(),
                     )
                 }
             }

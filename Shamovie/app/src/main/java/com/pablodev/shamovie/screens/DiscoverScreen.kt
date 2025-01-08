@@ -20,12 +20,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -38,12 +37,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.pablodev.shamovie.R
+import com.pablodev.shamovie.core.presentation.SnackbarAction
+import com.pablodev.shamovie.core.presentation.SnackbarController
+import com.pablodev.shamovie.core.presentation.SnackbarEvent
 import com.pablodev.shamovie.media.presentation.discover.DiscoverAction
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.navigation.Screen
 import com.pablodev.shamovie.speech.SpeechRecognizer
+import kotlinx.coroutines.launch
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun DiscoverScreen(
     viewModel: DiscoverViewModel,
@@ -53,6 +56,8 @@ fun DiscoverScreen(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val speechRecognizer = SpeechRecognizer(context)
+    val scope = rememberCoroutineScope()
+
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -78,7 +83,6 @@ fun DiscoverScreen(
                     viewModel.onAction(DiscoverAction.OnStart)
                     speechRecognizer.startListening(
                         onResult = { recognizedText ->
-                            Toast.makeText(context, recognizedText, Toast.LENGTH_SHORT).show()
                             viewModel.onAction(
                                 DiscoverAction.OnQueryFound(recognizedText)
                             )
@@ -107,11 +111,29 @@ fun DiscoverScreen(
                 viewModel.onAction(DiscoverAction.ResetResult)
             }
 
-            if (state.errorMessage != null) {
-                Toast.makeText(context, state.errorMessage?.asString(), Toast.LENGTH_SHORT)
-                    .show()
-            }
+            state.errorMessage?.let { error ->
+                val msg = error.asString()
+                var action: SnackbarAction? = null
 
+                if (state.noResults == true) {
+                    action = SnackbarAction(
+                        name = "Modify",
+                        action = {
+
+                        }
+                    )
+                }
+
+                scope.launch {
+                    SnackbarController.sendEvent(
+                        event = SnackbarEvent(
+                            message = msg,
+                            action = action
+                        )
+                    )
+                }
+                viewModel.onAction(DiscoverAction.ResetResult)
+            }
         }
     }
 }

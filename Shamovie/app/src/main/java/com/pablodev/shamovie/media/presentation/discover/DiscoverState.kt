@@ -7,5 +7,7 @@ data class DiscoverState(
     val isLoading: Boolean = false,
     val isListening: Boolean = false,
     val mediaResult: MediaResult? = null,
-    val errorMessage: UiText? = null
+    val errorMessage: UiText? = null,
+    val query: String? = null,
+    val noResults: Boolean? = false
 )
