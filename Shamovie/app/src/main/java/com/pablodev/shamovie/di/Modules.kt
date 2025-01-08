@@ -5,8 +5,10 @@ import com.pablodev.shamovie.media.data.network.KtorRemoteMediaDataSource
 import com.pablodev.shamovie.media.data.network.RemoteMediaDataSource
 import com.pablodev.shamovie.media.data.repository.DefaultMediaRepository
 import com.pablodev.shamovie.media.domain.MediaRepository
+import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import io.ktor.client.engine.cio.CIO
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -23,4 +25,6 @@ val modules = module {
 
     // Provide MediaRepository
     singleOf(::DefaultMediaRepository).bind<MediaRepository>()
+
+    viewModelOf(::DiscoverViewModel)
 }
