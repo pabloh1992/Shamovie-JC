@@ -82,6 +82,8 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     api(libs.koin.core)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.constraintlayout.compose)
+    implementation(libs.androidx.media3.common.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
