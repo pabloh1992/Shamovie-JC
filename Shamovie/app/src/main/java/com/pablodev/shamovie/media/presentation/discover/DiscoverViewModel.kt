@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pablodev.shamovie.core.domain.onError
 import com.pablodev.shamovie.core.domain.onSuccess
+import com.pablodev.shamovie.core.presentation.UiText
+import com.pablodev.shamovie.core.presentation.toUiText
 import com.pablodev.shamovie.media.domain.MediaRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -45,6 +47,13 @@ class DiscoverViewModel(
                     )
                 }
             }
+            is DiscoverAction.ResetResult -> {
+                _state.update {
+                    it.copy(
+                        mediaResult = null,
+                    )
+                }
+            }
         }
     }
 
@@ -54,17 +63,37 @@ class DiscoverViewModel(
                 media = "movie",
                 query = query
             ).onSuccess { list ->
+
                 list.forEach { result ->
                     Log.d(TAG, "Media result = $result")
+                }
+
+                if (list.isNotEmpty()) {
                     _state.update {
                         it.copy(
                             isListening = false,
                             isLoading = false,
+                            mediaResult = list.first()
+                        )
+                    }
+                } else {
+                    _state.update {
+                        it.copy(
+                            isListening = false,
+                            isLoading = false,
+                            errorMessage = UiText.DynamicString("No results found for $query")
                         )
                     }
                 }
-            }.onError {
 
+            }.onError { error ->
+                _state.update {
+                    it.copy(
+                        isListening = false,
+                        isLoading = false,
+                        errorMessage = error.toUiText()
+                    )
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.pablodev.shamovie.screens
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.core.LinearEasing
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,8 +40,10 @@ import androidx.navigation.NavHostController
 import com.pablodev.shamovie.R
 import com.pablodev.shamovie.media.presentation.discover.DiscoverAction
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
+import com.pablodev.shamovie.navigation.Screen
 import com.pablodev.shamovie.speech.SpeechRecognizer
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DiscoverScreen(
     viewModel: DiscoverViewModel,
@@ -48,7 +53,6 @@ fun DiscoverScreen(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val speechRecognizer = SpeechRecognizer(context)
-
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -98,10 +102,19 @@ fun DiscoverScreen(
             )
             Spacer(modifier = Modifier.height(48.dp))
 
+            if (state.mediaResult != null) {
+                navController.navigate(Screen.Details.route)
+                viewModel.onAction(DiscoverAction.ResetResult)
+            }
+
+            if (state.errorMessage != null) {
+                Toast.makeText(context, state.errorMessage?.asString(), Toast.LENGTH_SHORT)
+                    .show()
+            }
+
         }
     }
 }
-
 
 @Composable
 fun ShamovieButton(animate: Boolean = false, onClick: () -> Unit) {
@@ -134,7 +147,7 @@ fun ShamovieButton(animate: Boolean = false, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .size(200.dp)
-            .clickable (
+            .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
             ) {
@@ -158,7 +171,8 @@ fun ShamovieButton(animate: Boolean = false, onClick: () -> Unit) {
                 )
 
                 for (i in 0 until numWaves) {
-                    val radius = (i + 1) * radiusStep * waveScales[i].value // Increase radius for each wave
+                    val radius =
+                        (i + 1) * radiusStep * waveScales[i].value // Increase radius for each wave
                     drawCircle(
                         color = waveColors[i], // Use different shades of light orange
                         radius = radius,
