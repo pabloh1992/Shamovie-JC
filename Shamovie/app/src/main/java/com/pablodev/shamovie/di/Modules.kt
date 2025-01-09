@@ -8,6 +8,7 @@ import com.pablodev.shamovie.media.data.network.RemoteMediaDataSource
 import com.pablodev.shamovie.media.data.repository.DefaultMediaRepository
 import com.pablodev.shamovie.media.domain.MediaRepository
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
+import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
 import io.ktor.client.engine.cio.CIO
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -22,14 +23,6 @@ val modules = module {
     // Provide the HttpClient using the CIO engine
     single { HttpClientFactory.create(get()) }
 
-    // Provide RemoteMediaDataSource
-    singleOf(::KtorRemoteMediaDataSource).bind<RemoteMediaDataSource>()
-
-    // Provide MediaRepository
-    singleOf(::DefaultMediaRepository).bind<MediaRepository>()
-
-    viewModelOf(::DiscoverViewModel)
-
     single {
         Room.databaseBuilder(get(), MovieDatabase::class.java, MovieDatabase.DB_MOVIE)
             .fallbackToDestructiveMigration(false)
@@ -38,4 +31,12 @@ val modules = module {
 
     single { get<MovieDatabase>().movieDao }
 
+    // Provide RemoteMediaDataSource
+    singleOf(::KtorRemoteMediaDataSource).bind<RemoteMediaDataSource>()
+
+    // Provide MediaRepository
+    singleOf(::DefaultMediaRepository).bind<MediaRepository>()
+
+    viewModelOf(::DiscoverViewModel)
+    viewModelOf(::MediaListViewModel)
 }

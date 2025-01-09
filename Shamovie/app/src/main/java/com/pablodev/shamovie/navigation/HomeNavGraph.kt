@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.pablodev.shamovie.media.presentation.discover.DiscoverState
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
+import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
 import com.pablodev.shamovie.screens.DetailScreen
 import com.pablodev.shamovie.screens.DiscoverScreen
 import com.pablodev.shamovie.screens.MoviesScreen
@@ -22,7 +23,10 @@ fun HomeNavGraph(
         startDestination = Screen.Discover.route
     ) {
         composable(route = Screen.MovieList.route){
-            MoviesScreen(navController)
+            MoviesScreen(
+                viewModel = koinViewModel<MediaListViewModel>(),
+                navController = navController
+            )
         }
 
         composable(route = Screen.Discover.route){

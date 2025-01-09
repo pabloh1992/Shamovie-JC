@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.pablodev.shamovie.media.domain.MediaResult
 import com.pablodev.shamovie.ui.theme.Greenish
 import com.pablodev.shamovie.ui.theme.Orangish
 import com.pablodev.shamovie.ui.theme.TextGray
@@ -36,24 +37,41 @@ import com.pablodev.shamovie.ui.theme.Whity
 
 @Composable
 fun MediaCard(
+    media: MediaResult,
+    onMediaClick: (MediaResult) -> Unit,
     posterImageRes: Int,
     isSelected: Boolean,
-    selectedIconRes: Int,
-    name: String,
-    rating: Float,
-    createdBy: String,
-    overview: String,
-    modifier: Modifier = Modifier,
+    //selectedIconRes: Int,
+   // modifier: Modifier = Modifier,
 ) {
+    val name: String
+    val createdBy: String
+    val rating: Float
+    val overview: String
+
+    when(media) {
+        is MediaResult.Movie -> {
+            name = media.title
+            createdBy = media.releaseDate?.take(4) ?: ""
+            rating = media.voteAverage.toFiveStarRating()
+            overview = media.overview
+        }
+        is MediaResult.TVShow -> {
+            name = media.name
+            createdBy = media.firstAirDate?.take(4) ?: ""
+            rating = media.voteAverage.toFiveStarRating()
+            overview = media.overview
+        }
+    }
 
 
     Box {
         Column {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth() // Ensure it spans the width
+                    .fillMaxWidth()
                     .background(Color.Transparent)
-                    .height(60.dp)
+                    .height(40.dp)
             ) {
             }
 
@@ -84,7 +102,7 @@ fun MediaCard(
                         // Movie Name
                         Text(
                             text = name,
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = TextGray,
                             maxLines = 1,
@@ -125,7 +143,7 @@ fun MediaCard(
             modifier = Modifier
                 .size(120.dp, 162.dp)
                 .align(Alignment.CenterStart)
-                .padding(start = 16.dp)
+                .padding(start = 16.dp, bottom = 16.dp)
         ) {
             Image(
                 painter = painterResource(id = posterImageRes),
@@ -138,4 +156,8 @@ fun MediaCard(
             )
         }
     }
+}
+
+fun Double.toFiveStarRating(): Float {
+    return (this / 2).toFloat()
 }
