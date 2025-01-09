@@ -1,6 +1,7 @@
 package com.pablodev.shamovie.media.presentation.discover
 
 import com.pablodev.shamovie.core.presentation.UiText
+import com.pablodev.shamovie.core.util.MediaKey
 import com.pablodev.shamovie.media.domain.MediaResult
 
 data class DiscoverState(
@@ -9,5 +10,6 @@ data class DiscoverState(
     val mediaResult: MediaResult? = null,
     val errorMessage: UiText? = null,
     val query: String? = null,
+    val mediaOption: MediaKey = MediaKey.MOVIE,
     val noResults: Boolean? = false
 )

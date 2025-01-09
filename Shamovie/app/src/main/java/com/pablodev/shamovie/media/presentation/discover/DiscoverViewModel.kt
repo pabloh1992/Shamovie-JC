@@ -58,6 +58,15 @@ class DiscoverViewModel(
                     )
                 }
             }
+
+            is DiscoverAction.OnMediaOptionChanged -> {
+                _state.update {
+                    it.copy(
+                        mediaOption = action.mediaOption
+                    )
+                }
+            }
+
             is DiscoverAction.OnCancel -> {
                 _state.update {
                     it.copy(

@@ -8,3 +8,8 @@ val Whity = Color(0xFFFFFFFF)
 val Background = Color(0xFFF5E3F4)
 val TextGray = Color(0xFF212121)
 val RatingInactive = Color(0xFFC9C9D1)
+val OrangishLight = Orangish.copy(
+    red = Orangish.red + (1f - Orangish.red) * 0.7f, // 70% closer to white
+    green = Orangish.green + (1f - Orangish.green) * 0.7f,
+    blue = Orangish.blue + (1f - Orangish.blue) * 0.7f
+)

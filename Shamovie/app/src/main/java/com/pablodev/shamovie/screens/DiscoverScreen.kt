@@ -18,14 +18,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -38,9 +42,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.pablodev.shamovie.R
+import com.pablodev.shamovie.core.presentation.RadioButtonGroup
+import com.pablodev.shamovie.core.presentation.ShamovieButton
 import com.pablodev.shamovie.core.presentation.SnackbarAction
 import com.pablodev.shamovie.core.presentation.SnackbarController
 import com.pablodev.shamovie.core.presentation.SnackbarEvent
+import com.pablodev.shamovie.core.util.MediaKey
 import com.pablodev.shamovie.media.presentation.discover.DiscoverAction
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.navigation.Screen
@@ -59,7 +66,7 @@ fun DiscoverScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val speechRecognizer = SpeechRecognizer(context)
     val scope = rememberCoroutineScope()
-
+    var selectedOption by remember { mutableStateOf(MediaKey.MOVIE) }
     Box(
         modifier = Modifier.fillMaxSize().padding(paddingValues),
     ) {
@@ -69,7 +76,10 @@ fun DiscoverScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Say The Movie",
+                text = when(state.mediaOption) {
+                    MediaKey.MOVIE -> "Say The Movie"
+                    MediaKey.TV_SHOW -> "Say The TV Show"
+                } ,
                 style = TextStyle(
                     fontSize = 28.sp
                 )
@@ -95,7 +105,22 @@ fun DiscoverScreen(
                     )
                 }
             )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+
+            RadioButtonGroup(
+                selectedOption = selectedOption,
+                onOptionSelected = {
+                    selectedOption = it
+                    viewModel.onAction(DiscoverAction.OnMediaOptionChanged(it))
+                },
+                modifier = Modifier
+                    .width(200.dp)
+                    .padding(16.dp)
+            )
             Spacer(modifier = Modifier.height(64.dp))
+
             Text(
                 text = when {
                     state.isListening -> "Listening..."
@@ -106,7 +131,7 @@ fun DiscoverScreen(
                     fontSize = 18.sp
                 )
             )
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             if (state.mediaResult != null) {
                 navController.navigate(Screen.Details.route)
@@ -139,82 +164,3 @@ fun DiscoverScreen(
         }
     }
 }
-
-@Composable
-fun ShamovieButton(animate: Boolean = false, onClick: () -> Unit) {
-    val infiniteTransition = rememberInfiniteTransition(label = "")
-
-    // Create pulsing effects with different scale factors for waves and icon
-    val waveScales = List(5) { index ->
-        infiniteTransition.animateFloat(
-            initialValue = 1f,
-            targetValue = if (animate) 1.5f + (index * 0.3f) else 1f, // Animation starts only if animate is true
-            animationSpec = infiniteRepeatable(
-                animation = tween(durationMillis = 1000, easing = LinearEasing),
-                repeatMode = RepeatMode.Restart
-            ),
-            label = ""
-        )
-    }
-
-    // The icon will pulse with its own unique scale
-    val iconScale = infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = if (animate) 1.2f else 1f, // Icon scales only if animation is triggered
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 800, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = ""
-    )
-
-    Box(
-        modifier = Modifier
-            .size(200.dp)
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                onClick()
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        // Only draw the waves if animation is active
-        if (animate) {
-            // Canvas with multiple circular waves growing
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                val numWaves = 5
-                val radiusStep = size.minDimension / numWaves
-
-                val waveColors = listOf(
-                    Color(0xFFFFE0B2).copy(alpha = 0.4f), // Very light orange with low opacity
-                    Color(0xFFFFCC80).copy(alpha = 0.5f), // Light orange with low opacity
-                    Color(0xFFFFB74D).copy(alpha = 0.6f), // Peachy orange with medium transparency
-                    Color(0xFFFF9800).copy(alpha = 0.7f), // Bright orange with medium transparency
-                    Color(0xFFFB8C00).copy(alpha = 0.8f)  // Slightly darker orange with high transparency
-                )
-
-                for (i in 0 until numWaves) {
-                    val radius =
-                        (i + 1) * radiusStep * waveScales[i].value // Increase radius for each wave
-                    drawCircle(
-                        color = waveColors[i], // Use different shades of light orange
-                        radius = radius,
-                        center = center,
-                        alpha = 1f - (i * 0.2f) // Decrease alpha for outer waves for fading effect
-                    )
-                }
-            }
-        }
-
-        Image(
-            painter = painterResource(id = R.drawable.logo_shamovie),
-            contentDescription = "Microphone Button",
-            modifier = Modifier
-                .size(180.dp)
-                .scale(iconScale.value)
-        )
-    }
-}
-
-
