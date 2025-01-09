@@ -17,5 +17,6 @@ data class TvShowEntity (
     val originCountry: String,
     val originalName: String,
     val firstAirDate: String?,
-    val name: String
+    val name: String,
+    val insertedAt: Long = System.currentTimeMillis() // Automatically set the current timestamp
 )

@@ -17,5 +17,6 @@ data class MovieEntity(
     val originalTitle: String,
     val releaseDate: String?,
     val title: String,
-    val video: Boolean
+    val video: Boolean,
+    val insertedAt: Long = System.currentTimeMillis() // Automatically set the current timestamp
 )

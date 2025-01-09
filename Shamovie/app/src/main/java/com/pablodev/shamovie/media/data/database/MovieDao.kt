@@ -11,7 +11,7 @@ interface MovieDao {
     @Upsert
     suspend fun upsert(book: MovieEntity)
 
-    @Query("SELECT * FROM MovieEntity")
+    @Query("SELECT * FROM MovieEntity ORDER BY insertedAt DESC")
     fun getMovies(): Flow<List<MovieEntity>>
 
     @Query("DELETE FROM MovieEntity WHERE id = :id")
