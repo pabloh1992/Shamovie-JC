@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,9 +67,11 @@ fun DiscoverScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val speechRecognizer = SpeechRecognizer(context)
     val scope = rememberCoroutineScope()
-    var selectedOption by remember { mutableStateOf(MediaKey.MOVIE) }
+
     Box(
-        modifier = Modifier.fillMaxSize().padding(paddingValues),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -108,30 +111,30 @@ fun DiscoverScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-
-            RadioButtonGroup(
-                selectedOption = selectedOption,
-                onOptionSelected = {
-                    selectedOption = it
-                    viewModel.onAction(DiscoverAction.OnMediaOptionChanged(it))
-                },
-                modifier = Modifier
-                    .width(200.dp)
-                    .padding(16.dp)
-            )
-            Spacer(modifier = Modifier.height(64.dp))
-
-            Text(
-                text = when {
-                    state.isListening -> "Listening..."
-                    state.isLoading -> "Recognizing..."
-                    else -> ""
-                },
-                style = TextStyle(
-                    fontSize = 18.sp
+            if (!state.isListening && !state.isLoading) {
+                RadioButtonGroup(
+                    selectedOption = state.mediaOption,
+                    onOptionSelected = {
+                        viewModel.onAction(DiscoverAction.OnMediaOptionChanged(it))
+                    },
+                    modifier = Modifier
+                        .width(200.dp)
+                        .padding(16.dp)
                 )
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+            } else {
+                Text(
+                    text = when {
+                        state.isListening -> "Listening..."
+                        state.isLoading -> "Recognizing..."
+                        else -> ""
+                    },
+                    style = TextStyle(
+                        fontSize = 18.sp
+                    ),
+                    modifier = Modifier.padding(16.dp)
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
 
             if (state.mediaResult != null) {
                 navController.navigate(Screen.Details.route)

@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.pablodev.shamovie.core.util.MediaKey
-import com.pablodev.shamovie.ui.theme.Background
+import com.pablodev.shamovie.ui.theme.BackgroundColor
 import com.pablodev.shamovie.ui.theme.Greenish
 
 @Composable
@@ -43,7 +43,7 @@ fun RadioButtonGroup(
                     .padding(horizontal = 4.dp, vertical = 2.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(
-                        color = if (isSelected) Background else Color.Transparent
+                        color = if (isSelected) BackgroundColor else Color.Transparent
                     )
                     .clickable { onOptionSelected(option) },
                 contentAlignment = Alignment.Center
