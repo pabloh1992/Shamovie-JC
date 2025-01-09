@@ -8,7 +8,6 @@ sealed class MediaResult {
     abstract val id: Int
     abstract val adult: Boolean
     abstract val backdropPath: String?
-    abstract val genreIds: List<Int>
     abstract val originalLanguage: String
     abstract val overview: String
     abstract val popularity: Double
@@ -21,7 +20,6 @@ sealed class MediaResult {
         override val id: Int,
         override val adult: Boolean,
         @SerialName("backdrop_path") override val backdropPath: String?,
-        @SerialName("genre_ids") override val genreIds: List<Int>,
         @SerialName("original_language") override val originalLanguage: String,
         override val overview: String,
         override val popularity: Double,
@@ -39,7 +37,6 @@ sealed class MediaResult {
         override val id: Int,
         override val adult: Boolean,
         @SerialName("backdrop_path") override val backdropPath: String?,
-        @SerialName("genre_ids") override val genreIds: List<Int>,
         @SerialName("original_language") override val originalLanguage: String,
         override val overview: String,
         override val popularity: Double,
