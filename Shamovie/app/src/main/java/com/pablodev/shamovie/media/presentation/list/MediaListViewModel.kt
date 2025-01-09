@@ -3,7 +3,6 @@ package com.pablodev.shamovie.media.presentation.list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pablodev.shamovie.core.presentation.toUiText
 import com.pablodev.shamovie.media.domain.MediaRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

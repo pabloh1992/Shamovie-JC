@@ -1,10 +1,10 @@
 package com.pablodev.shamovie.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.pablodev.shamovie.media.presentation.discover.DiscoverState
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
 import com.pablodev.shamovie.screens.DetailScreen
@@ -16,6 +16,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeNavGraph(
     navController: NavHostController,
+    paddingValues: PaddingValues
 ) {
     NavHost(
         navController = navController,
@@ -25,19 +26,25 @@ fun HomeNavGraph(
         composable(route = Screen.MovieList.route){
             MoviesScreen(
                 viewModel = koinViewModel<MediaListViewModel>(),
-                navController = navController
+                navController = navController,
+                paddingValues = paddingValues
             )
         }
 
         composable(route = Screen.Discover.route){
             DiscoverScreen(
                 viewModel = koinViewModel<DiscoverViewModel>(),
-                navController = navController
+                navController = navController,
+                paddingValues = paddingValues
             )
         }
 
         composable(route = Screen.TvShowList.route){
-            TvShowsScreen()
+            TvShowsScreen(
+                viewModel = koinViewModel<MediaListViewModel>(),
+                navController = navController,
+                paddingValues = paddingValues
+            )
         }
 
         composable(route = Screen.Details.route){

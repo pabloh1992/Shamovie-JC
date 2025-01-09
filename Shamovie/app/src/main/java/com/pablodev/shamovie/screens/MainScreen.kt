@@ -1,6 +1,5 @@
 package com.pablodev.shamovie.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -17,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,7 +34,6 @@ import com.pablodev.shamovie.navigation.HomeNavGraph
 import com.pablodev.shamovie.navigation.Screen
 import kotlinx.coroutines.launch
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen( ) {
 
@@ -83,8 +80,8 @@ fun MainScreen( ) {
                     hostState = snackbarHostState
                 )
             },
-        ) {
-            HomeNavGraph(navController)
+        ) { paddingValues ->
+            HomeNavGraph(navController, paddingValues)
         }
     }
 }
