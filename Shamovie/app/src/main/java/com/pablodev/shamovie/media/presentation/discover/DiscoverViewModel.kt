@@ -22,19 +22,8 @@ class DiscoverViewModel(
     private val mediaRepository: MediaRepository
 ) : ViewModel() {
 
-    private var observeMovieListJob: Job? = null
-
-
     private val _state = MutableStateFlow(DiscoverState())
     val state = _state
-        .onStart {
-            observeMovieList()
-        }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000L),
-            _state.value
-        )
 
     private val TAG = "DiscoverViewModel"
 
@@ -91,7 +80,7 @@ class DiscoverViewModel(
     private fun getMedia(query: String) {
         viewModelScope.launch {
             mediaRepository.searchMedia(
-                media = "movie",
+                media = state.value.mediaOption.value,
                 query = query
             ).onSuccess { list ->
 
@@ -133,18 +122,4 @@ class DiscoverViewModel(
             }
         }
     }
-
-    private fun observeMovieList() {
-        observeMovieListJob?.cancel()
-        observeMovieListJob = mediaRepository
-            .getMedia()
-            .onEach { list ->
-
-                list.forEach { movie ->
-                    Log.d(TAG, "Saved movie = $movie")
-                }
-            }
-            .launchIn(viewModelScope)
-    }
-
 }

@@ -79,7 +79,7 @@ fun DiscoverScreen(
                 text = when(state.mediaOption) {
                     MediaKey.MOVIE -> "Say The Movie"
                     MediaKey.TV_SHOW -> "Say The TV Show"
-                } ,
+                },
                 style = TextStyle(
                     fontSize = 28.sp
                 )

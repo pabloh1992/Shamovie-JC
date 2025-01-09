@@ -2,6 +2,7 @@ package com.pablodev.shamovie.di
 
 import androidx.room.Room
 import com.pablodev.shamovie.core.data.HttpClientFactory
+import com.pablodev.shamovie.core.util.MediaKey
 import com.pablodev.shamovie.media.data.database.MovieDatabase
 import com.pablodev.shamovie.media.data.network.KtorRemoteMediaDataSource
 import com.pablodev.shamovie.media.data.network.RemoteMediaDataSource
@@ -11,7 +12,9 @@ import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
 import io.ktor.client.engine.cio.CIO
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
@@ -30,6 +33,7 @@ val modules = module {
     }
 
     single { get<MovieDatabase>().movieDao }
+    single { get<MovieDatabase>().tvShowDao }
 
     // Provide RemoteMediaDataSource
     singleOf(::KtorRemoteMediaDataSource).bind<RemoteMediaDataSource>()
@@ -38,5 +42,14 @@ val modules = module {
     singleOf(::DefaultMediaRepository).bind<MediaRepository>()
 
     viewModelOf(::DiscoverViewModel)
-    viewModelOf(::MediaListViewModel)
+    //viewModelOf(::MediaListViewModel)
+
+    viewModel(named("movie")) {
+        MediaListViewModel(get(), MediaKey.MOVIE)
+    }
+
+    viewModel(named("tv")) {
+        MediaListViewModel(get(), MediaKey.TV_SHOW)
+    }
+
 }

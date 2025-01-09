@@ -1,6 +1,7 @@
 package com.pablodev.shamovie.media.data.mappers
 
 import com.pablodev.shamovie.media.data.database.MovieEntity
+import com.pablodev.shamovie.media.data.database.TvShowEntity
 import com.pablodev.shamovie.media.data.dto.SearchedResultDto
 import com.pablodev.shamovie.media.domain.MediaResult
 
@@ -32,7 +33,7 @@ fun SearchedResultDto.toMediaResult(): MediaResult {
             posterPath = posterPath,
             voteAverage = voteAverage,
             voteCount = voteCount,
-            originCountry = emptyList(), // Assuming a default empty list if not provided
+            originCountry = originCountry?.firstOrNull() ?: "",
             originalName = originalName ?: "", // Assuming `originalName` is always non-null for TV shows
             firstAirDate = firstAirDate,
             name = name ?: "" // Assuming `name` is always non-null for TV shows
@@ -62,6 +63,28 @@ fun MediaResult.toMovieEntity(): MovieEntity {
     }
 }
 
+fun MediaResult.toTvShowEntity(): TvShowEntity {
+    if (this is MediaResult.TVShow) {
+        return TvShowEntity(
+            id = this.id,
+            adult = this.adult,
+            backdropPath = this.backdropPath,
+            originalLanguage = this.originalLanguage,
+            overview = this.overview,
+            popularity = this.popularity,
+            posterPath = this.posterPath,
+            voteAverage = this.voteAverage,
+            voteCount = this.voteCount,
+            originCountry = this.originCountry,
+            originalName = this.originalName,
+            firstAirDate = this.firstAirDate,
+            name = this.name
+        )
+    } else {
+        throw IllegalArgumentException("Cannot convert Movie to TvShowEntity")
+    }
+}
+
 fun MovieEntity.toMediaResult(): MediaResult.Movie {
     return MediaResult.Movie(
         id = this.id,
@@ -79,3 +102,22 @@ fun MovieEntity.toMediaResult(): MediaResult.Movie {
         video = this.video
     )
 }
+
+fun TvShowEntity.toMediaResult(): MediaResult.TVShow {
+    return MediaResult.TVShow(
+        id = this.id,
+        adult = this.adult,
+        backdropPath = this.backdropPath,
+        originalLanguage = this.originalLanguage,
+        overview = this.overview,
+        popularity = this.popularity,
+        posterPath = this.posterPath,
+        voteAverage = this.voteAverage,
+        voteCount = this.voteCount,
+        originCountry = this.originCountry,
+        originalName = this.originalName,
+        firstAirDate = this.firstAirDate,
+        name = this.name
+    )
+}
+

@@ -3,6 +3,7 @@ package com.pablodev.shamovie.media.presentation.list
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pablodev.shamovie.core.util.MediaKey
 import com.pablodev.shamovie.media.domain.MediaRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,14 +16,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MediaListViewModel(
-    private val mediaRepository: MediaRepository
+    private val mediaRepository: MediaRepository,
+    private val mediaKey: MediaKey
 ) : ViewModel() {
 
     private val TAG = "MediaListViewModel"
 
-
     private var observeMovieListJob: Job? = null
-
 
     private val _state = MutableStateFlow(MediaListState())
     val state = _state
@@ -49,9 +49,9 @@ class MediaListViewModel(
         }
     }
 
-    fun getMovies() {
+    fun getMedia() {
         viewModelScope.launch {
-            mediaRepository.getMedia().collect { list ->
+            mediaRepository.getMedia(mediaKey).collect { list ->
                 _state.update {
                     it.copy(
                         mediaList = list
@@ -61,23 +61,16 @@ class MediaListViewModel(
         }
     }
 
-
     private fun observeMovieList() {
         observeMovieListJob?.cancel()
         observeMovieListJob = mediaRepository
-            .getMedia()
+            .getMedia(mediaKey)
             .onEach { list ->
-
-                list.forEach { movie ->
-                    Log.d(TAG, "Saved movie = $movie")
-                }
-
                 _state.update {
                     it.copy(
                         mediaList = list
                     )
                 }
-
             }
             .launchIn(viewModelScope)
     }

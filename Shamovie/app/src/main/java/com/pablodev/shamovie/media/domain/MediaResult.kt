@@ -43,7 +43,7 @@ sealed class MediaResult {
         @SerialName("poster_path") override val posterPath: String?,
         @SerialName("vote_average") override val voteAverage: Double,
         @SerialName("vote_count") override val voteCount: Int,
-        @SerialName("origin_country") val originCountry: List<String>,
+        @SerialName("origin_country") val originCountry: String,
         @SerialName("original_name") val originalName: String,
         @SerialName("first_air_date") val firstAirDate: String?,
         val name: String

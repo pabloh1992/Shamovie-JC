@@ -19,7 +19,8 @@ data class SearchedResultDto(
     @SerialName("first_air_date") val firstAirDate: String? = null, // For TV shows
     val title: String? = null, // For movies
     val name: String? = null, // For TV shows
-    val video: Boolean?,
+    val video: Boolean? = null,
     @SerialName("vote_average") val voteAverage: Double,
-    @SerialName("vote_count") val voteCount: Int
+    @SerialName("vote_count") val voteCount: Int,
+    @SerialName("origin_country") val originCountry: List<String>? = null,
 )

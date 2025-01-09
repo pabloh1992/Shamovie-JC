@@ -5,9 +5,12 @@ import com.pablodev.shamovie.core.domain.DataError
 import com.pablodev.shamovie.core.domain.EmptyResult
 import com.pablodev.shamovie.core.domain.Result
 import com.pablodev.shamovie.core.domain.map
+import com.pablodev.shamovie.core.util.MediaKey
 import com.pablodev.shamovie.media.data.database.MovieDao
+import com.pablodev.shamovie.media.data.database.TvShowDao
 import com.pablodev.shamovie.media.data.mappers.toMediaResult
 import com.pablodev.shamovie.media.data.mappers.toMovieEntity
+import com.pablodev.shamovie.media.data.mappers.toTvShowEntity
 import com.pablodev.shamovie.media.data.network.RemoteMediaDataSource
 import com.pablodev.shamovie.media.domain.MediaRepository
 import com.pablodev.shamovie.media.domain.MediaResult
@@ -16,7 +19,8 @@ import kotlinx.coroutines.flow.map
 
 class DefaultMediaRepository(
     private val remoteMediaDataSource: RemoteMediaDataSource,
-    private val movieDao: MovieDao
+    private val movieDao: MovieDao,
+    private val tvShowDao: TvShowDao
 ): MediaRepository {
 
     override suspend fun searchMedia(
@@ -36,7 +40,7 @@ class DefaultMediaRepository(
                     movieDao.upsert(media.toMovieEntity())
                 }
                 is MediaResult.TVShow -> {
-                    movieDao.upsert(media.toMovieEntity())
+                    tvShowDao.upsert(media.toTvShowEntity())
                 }
             }
             Result.Success(Unit)
@@ -45,10 +49,18 @@ class DefaultMediaRepository(
         }
     }
 
-    override fun getMedia(): Flow<List<MediaResult>> {
-        return movieDao.getMovies().map {
-            it.map { entity ->
-                entity.toMediaResult()
+    override fun getMedia(mediaKey: MediaKey): Flow<List<MediaResult>> {
+
+        when (mediaKey) {
+            MediaKey.MOVIE -> return movieDao.getMovies().map {
+                it.map { entity ->
+                    entity.toMediaResult()
+                }
+            }
+            MediaKey.TV_SHOW -> return tvShowDao.getTvShows().map {
+                it.map { entity ->
+                    entity.toMediaResult()
+                }
             }
         }
     }

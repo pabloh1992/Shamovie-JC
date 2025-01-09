@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.pablodev.shamovie.core.presentation.MediaList
+import com.pablodev.shamovie.media.presentation.list.MediaListAction
 import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
 
 @Composable
@@ -29,12 +31,24 @@ fun TvShowsScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues),
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.TopCenter,
     ) {
-        Column {
-            Text(
-                text = "Tv Shows"
-            )
+        Column (
+            modifier = Modifier.fillMaxSize(),
+        ) {
+
+            if(state.mediaList.isNotEmpty()) {
+                MediaList(
+                    mediaList = state.mediaList,
+                    onMediaClick = {
+                        viewModel.onAction(MediaListAction.OnMediaClick(it))
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxSize(),
+                    scrollState = mediaListScrollState,
+                )
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 
 @Database(
-    entities = [MovieEntity::class],
+    entities = [MovieEntity::class, TvShowEntity::class],
     version = 1
 )
 
@@ -15,9 +15,10 @@ import androidx.room.RoomDatabaseConstructor
 //)
 abstract class MovieDatabase: RoomDatabase() {
     abstract val movieDao: MovieDao
+    abstract val tvShowDao: TvShowDao
 
     companion object {
-        const val DB_MOVIE = "movie.db"
+        const val DB_MOVIE = "media.db"
     }
 }
 

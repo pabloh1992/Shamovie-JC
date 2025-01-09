@@ -3,6 +3,7 @@ package com.pablodev.shamovie.media.domain
 import com.pablodev.shamovie.core.domain.DataError
 import com.pablodev.shamovie.core.domain.EmptyResult
 import com.pablodev.shamovie.core.domain.Result
+import com.pablodev.shamovie.core.util.MediaKey
 import kotlinx.coroutines.flow.Flow
 
 interface MediaRepository {
@@ -13,7 +14,5 @@ interface MediaRepository {
 
     suspend fun insertMedia(media: MediaResult): EmptyResult<DataError.Local>
 
-    fun getMedia(): Flow<List<MediaResult>>
-
-
+    fun getMedia(mediaKey: MediaKey): Flow<List<MediaResult>>
 }
