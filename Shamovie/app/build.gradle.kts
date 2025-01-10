@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.sqlite.bundled)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

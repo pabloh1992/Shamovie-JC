@@ -4,24 +4,24 @@ import com.pablodev.shamovie.R
 
 sealed class BottomNavItems(
     val title : String,
-    val route : String,
+    val route : Route,
     val iconResource: Int,
 ){
     data object Movies : BottomNavItems(
         title = "Movies",
-        route = Screen.MovieList.route,
+        route = Route.MovieList,
         iconResource = R.drawable.ic_movie,
     )
 
     data object Discover : BottomNavItems(
         title = "Discover",
-        route = Screen.Discover.route,
+        route = Route.Discover,
         iconResource = R.drawable.ic_mic
     )
 
     data object TvShows : BottomNavItems(
         title = "Shows",
-        route = Screen.TvShowList.route,
+        route = Route.TvShowList,
         iconResource = R.drawable.ic_tv
     )
 }

@@ -1,5 +1,6 @@
 package com.pablodev.shamovie.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,16 +31,19 @@ import androidx.navigation.compose.rememberNavController
 import com.pablodev.shamovie.core.presentation.ObserveAsEvents
 import com.pablodev.shamovie.core.presentation.SnackbarController
 import com.pablodev.shamovie.navigation.BottomNavItems
-import com.pablodev.shamovie.navigation.HomeNavGraph
-import com.pablodev.shamovie.navigation.Screen
+import com.pablodev.shamovie.navigation.MainNavGraph
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen( ) {
 
+    val TAG = "MainScreen"
+
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute: String? = navBackStackEntry?.destination?.route
+
+    Log.d(TAG, "Navigaation - current route $currentRoute")
 
     val snackbarHostState = remember {
         SnackbarHostState()
@@ -72,7 +76,7 @@ fun MainScreen( ) {
     ) {
         Scaffold(
             bottomBar = {
-                if (currentRoute != Screen.Details.route)
+                if (currentRoute?.contains("Detail") == false)
                     BottomNavigationBar(navController)
             },
             snackbarHost = {
@@ -81,7 +85,7 @@ fun MainScreen( ) {
                 )
             },
         ) { paddingValues ->
-            HomeNavGraph(navController, paddingValues)
+            MainNavGraph(navController, paddingValues)
         }
     }
 }

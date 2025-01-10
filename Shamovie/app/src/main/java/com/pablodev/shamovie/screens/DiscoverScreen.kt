@@ -2,56 +2,42 @@ package com.pablodev.shamovie.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.pablodev.shamovie.R
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.pablodev.shamovie.core.presentation.RadioButtonGroup
 import com.pablodev.shamovie.core.presentation.ShamovieButton
 import com.pablodev.shamovie.core.presentation.SnackbarAction
 import com.pablodev.shamovie.core.presentation.SnackbarController
 import com.pablodev.shamovie.core.presentation.SnackbarEvent
 import com.pablodev.shamovie.core.util.MediaKey
+import com.pablodev.shamovie.core.util.toJson
+import com.pablodev.shamovie.media.domain.MediaResult
 import com.pablodev.shamovie.media.presentation.discover.DiscoverAction
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
-import com.pablodev.shamovie.navigation.Screen
+import com.pablodev.shamovie.navigation.Route
 import com.pablodev.shamovie.speech.SpeechRecognizer
 import kotlinx.coroutines.launch
 
@@ -136,9 +122,18 @@ fun DiscoverScreen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
-            if (state.mediaResult != null) {
-                navController.navigate(Screen.Details.route)
-                viewModel.onAction(DiscoverAction.ResetResult)
+            state.mediaResult?.let { media ->
+                state.query?.let { query ->
+
+                    navController.navigate(
+                        Route.Details(
+                            query = query,
+                            media = media.toJson(),
+                            isMovie = media is MediaResult.Movie
+                        )
+                    )
+                    viewModel.onAction(DiscoverAction.ResetResult)
+                }
             }
 
             state.errorMessage?.let { error ->
@@ -167,3 +162,4 @@ fun DiscoverScreen(
         }
     }
 }
+

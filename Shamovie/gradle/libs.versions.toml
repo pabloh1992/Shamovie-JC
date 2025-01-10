@@ -20,6 +20,7 @@ media3CommonKtx = "1.5.1"
 ksp = "2.0.20-1.0.24"
 sqlite = "2.5.0-alpha11"
 room = "2.7.0-alpha11"
+gson = "2.10.1"
 
 
 [libraries]
@@ -62,6 +63,8 @@ androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 
 
 [plugins]
