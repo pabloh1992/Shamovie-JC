@@ -10,4 +10,8 @@ interface RemoteMediaDataSource {
         media: String,
         query: String
     ): Result<SearchResponseDto, DataError.Remote>
+
+    suspend fun getPosterImage(
+        posterPath: String
+    ) : Result<ByteArray, DataError.Remote>
 }

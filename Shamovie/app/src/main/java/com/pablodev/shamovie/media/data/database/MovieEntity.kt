@@ -18,5 +18,6 @@ data class MovieEntity(
     val releaseDate: String?,
     val title: String,
     val video: Boolean,
+    var posterDecoded: String? = null,
     val insertedAt: Long = System.currentTimeMillis() // Automatically set the current timestamp
 )

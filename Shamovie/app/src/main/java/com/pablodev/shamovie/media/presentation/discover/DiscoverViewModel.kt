@@ -1,5 +1,6 @@
 package com.pablodev.shamovie.media.presentation.discover
 
+import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,13 +9,7 @@ import com.pablodev.shamovie.core.domain.onSuccess
 import com.pablodev.shamovie.core.presentation.UiText
 import com.pablodev.shamovie.core.presentation.toUiText
 import com.pablodev.shamovie.media.domain.MediaRepository
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -84,21 +79,33 @@ class DiscoverViewModel(
                 query = query
             ).onSuccess { list ->
 
-                list.forEach { result ->
-                    Log.d(TAG, "Media result = $result")
-                }
-
                 if (list.isNotEmpty()) {
-
                     val media = list.first()
-                    mediaRepository.insertMedia(media)
-
-                    _state.update {
-                        it.copy(
-                            isListening = false,
-                            isLoading = false,
-                            mediaResult = media
-                        )
+                    Log.d(TAG, "Media discovered result = $media")
+                    media.posterPath?.let { posterPath ->
+                        mediaRepository.getPosterImage(posterPath = posterPath)
+                            .onSuccess { posterByte ->
+                                media.posterDecoded = Base64.encodeToString(posterByte, Base64.DEFAULT)
+                                mediaRepository.insertMedia(media)
+                                _state.update {
+                                    it.copy(
+                                        isListening = false,
+                                        isLoading = false,
+                                        mediaResult = media
+                                    )
+                                }
+                            }
+                            .onError {
+                                media.posterDecoded = null
+                                mediaRepository.insertMedia(media)
+                                _state.update {
+                                    it.copy(
+                                        isListening = false,
+                                        isLoading = false,
+                                        mediaResult = media
+                                    )
+                                }
+                            }
                     }
                 } else {
                     _state.update {

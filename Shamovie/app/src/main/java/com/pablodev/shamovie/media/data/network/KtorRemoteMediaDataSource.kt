@@ -6,10 +6,12 @@ import com.pablodev.shamovie.core.domain.DataError
 import com.pablodev.shamovie.core.domain.Result
 import com.pablodev.shamovie.media.data.dto.SearchResponseDto
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 
 private const val BASE_URL = "https://api.themoviedb.org/3"
+private const val IMAGE_URL = "https://image.tmdb.org/t"
 
 class KtorRemoteMediaDataSource(
     private val httpClient: HttpClient
@@ -26,6 +28,18 @@ class KtorRemoteMediaDataSource(
                 parameter("query", query)
                 parameter("api_key", BuildConfig.API_KEY)
             }
+        }
+    }
+
+    override suspend fun getPosterImage(
+        posterPath: String
+    ): Result<ByteArray, DataError.Remote> {
+        return safeCall<ByteArray> {
+            httpClient.get(
+                urlString = "$IMAGE_URL/p/w500${posterPath}"
+            ) {
+                parameter("api_key", BuildConfig.API_KEY)
+            }.body()
         }
     }
 }

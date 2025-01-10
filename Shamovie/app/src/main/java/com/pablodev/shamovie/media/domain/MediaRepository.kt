@@ -12,6 +12,10 @@ interface MediaRepository {
         query: String
     ): Result<List<MediaResult>, DataError.Remote>
 
+    suspend fun getPosterImage(
+        posterPath: String
+    ) : Result<ByteArray, DataError.Remote>
+
     suspend fun insertMedia(media: MediaResult): EmptyResult<DataError.Local>
 
     fun getMedia(mediaKey: MediaKey): Flow<List<MediaResult>>

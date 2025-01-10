@@ -35,8 +35,7 @@ fun MediaList(
                 onMediaClick = {
                     onMediaClick(media)
                 },
-                isSelected = false,
-                posterImageRes = R.drawable.poster_not_available
+                isSelected = false
             )
         }
     }

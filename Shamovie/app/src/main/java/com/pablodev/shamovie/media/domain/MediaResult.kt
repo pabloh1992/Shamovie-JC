@@ -14,6 +14,7 @@ sealed class MediaResult {
     abstract val posterPath: String?
     abstract val voteAverage: Double
     abstract val voteCount: Int
+    abstract var posterDecoded: String?
 
     @Serializable
     data class Movie(
@@ -29,7 +30,8 @@ sealed class MediaResult {
         @SerialName("original_title") val originalTitle: String,
         @SerialName("release_date") val releaseDate: String?,
         val title: String,
-        val video: Boolean
+        val video: Boolean,
+        override var posterDecoded: String? = null
     ) : MediaResult()
 
     @Serializable
@@ -46,6 +48,7 @@ sealed class MediaResult {
         @SerialName("origin_country") val originCountry: String,
         @SerialName("original_name") val originalName: String,
         @SerialName("first_air_date") val firstAirDate: String?,
-        val name: String
+        val name: String,
+        override var posterDecoded: String? = null
     ) : MediaResult()
 }

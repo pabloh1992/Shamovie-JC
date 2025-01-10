@@ -1,5 +1,8 @@
 package com.pablodev.shamovie.core.presentation
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -27,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.pablodev.shamovie.R
 import com.pablodev.shamovie.media.domain.MediaResult
 import com.pablodev.shamovie.ui.theme.TextGray
 
@@ -34,7 +39,6 @@ import com.pablodev.shamovie.ui.theme.TextGray
 fun MediaCard(
     media: MediaResult,
     onMediaClick: (MediaResult) -> Unit,
-    posterImageRes: Int,
     isSelected: Boolean,
     //selectedIconRes: Int,
    // modifier: Modifier = Modifier,
@@ -43,6 +47,7 @@ fun MediaCard(
     val createdBy: String
     val rating: Float
     val overview: String
+    var posterBitmap: Bitmap? = null
 
     when(media) {
         is MediaResult.Movie -> {
@@ -59,6 +64,15 @@ fun MediaCard(
         }
     }
 
+    media.posterDecoded?.let {
+        val imageAsBytes: ByteArray =
+            Base64.decode(it, Base64.DEFAULT)
+        posterBitmap = BitmapFactory.decodeByteArray(
+            imageAsBytes,
+            0,
+            imageAsBytes.size
+        )
+    }
 
     Box {
         Column {
@@ -140,15 +154,27 @@ fun MediaCard(
                 .align(Alignment.CenterStart)
                 .padding(start = 16.dp, bottom = 16.dp)
         ) {
-            Image(
-                painter = painterResource(id = posterImageRes),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .offset(y = 8.dp, x = 8.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
-            )
+            posterBitmap?.asImageBitmap()?.let {
+                Image(
+                    bitmap = it,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset(y = 8.dp, x = 8.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            } ?: run {
+                Image(
+                    painter = painterResource(id = R.drawable.poster_not_available),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset(y = 8.dp, x = 8.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
     }
 }

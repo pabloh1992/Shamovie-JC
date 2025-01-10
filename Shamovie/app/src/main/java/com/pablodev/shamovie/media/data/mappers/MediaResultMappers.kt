@@ -56,7 +56,8 @@ fun MediaResult.toMovieEntity(): MovieEntity {
             originalTitle = this.originalTitle,
             releaseDate = this.releaseDate,
             title = this.title,
-            video = this.video
+            video = this.video,
+            posterDecoded = posterDecoded
         )
     } else {
         throw IllegalArgumentException("Cannot convert TVShow to MovieEntity")
@@ -78,7 +79,8 @@ fun MediaResult.toTvShowEntity(): TvShowEntity {
             originCountry = this.originCountry,
             originalName = this.originalName,
             firstAirDate = this.firstAirDate,
-            name = this.name
+            name = this.name,
+            posterDecoded = posterDecoded
         )
     } else {
         throw IllegalArgumentException("Cannot convert Movie to TvShowEntity")
@@ -99,7 +101,8 @@ fun MovieEntity.toMediaResult(): MediaResult.Movie {
         originalTitle = this.originalTitle,
         releaseDate = this.releaseDate,
         title = this.title,
-        video = this.video
+        video = this.video,
+        posterDecoded = this.posterDecoded
     )
 }
 
@@ -117,7 +120,8 @@ fun TvShowEntity.toMediaResult(): MediaResult.TVShow {
         originCountry = this.originCountry,
         originalName = this.originalName,
         firstAirDate = this.firstAirDate,
-        name = this.name
+        name = this.name,
+        posterDecoded = this.posterDecoded
     )
 }
 

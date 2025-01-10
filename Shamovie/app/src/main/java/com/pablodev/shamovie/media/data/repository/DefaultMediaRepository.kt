@@ -33,6 +33,11 @@ class DefaultMediaRepository(
             }
     }
 
+    override suspend fun getPosterImage(posterPath: String): Result<ByteArray, DataError.Remote> {
+        return remoteMediaDataSource.getPosterImage(posterPath)
+    }
+
+
     override suspend fun insertMedia(media: MediaResult): Result<Unit, DataError.Local> {
         return try {
             when (media) {
