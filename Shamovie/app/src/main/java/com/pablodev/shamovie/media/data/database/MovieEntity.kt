@@ -7,17 +7,21 @@ import androidx.room.PrimaryKey
 data class MovieEntity(
     @PrimaryKey(autoGenerate = false)  val id: Int,
     val adult: Boolean,
-    val backdropPath: String?,
     val originalLanguage: String,
     val overview: String,
     val popularity: Double,
     val posterPath: String?,
     val voteAverage: Double,
     val voteCount: Int,
+    val video: Boolean,
+    val genre: String?,
+    val productionCompany: String?,
+
     val originalTitle: String,
     val releaseDate: String?,
     val title: String,
-    val video: Boolean,
+    val runtime: Int? = null,
+
     var posterDecoded: String? = null,
     val insertedAt: Long = System.currentTimeMillis() // Automatically set the current timestamp
 )

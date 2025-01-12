@@ -4,6 +4,7 @@ import com.pablodev.shamovie.BuildConfig
 import com.pablodev.shamovie.core.data.safeCall
 import com.pablodev.shamovie.core.domain.DataError
 import com.pablodev.shamovie.core.domain.Result
+import com.pablodev.shamovie.media.data.dto.MediaDetailDto
 import com.pablodev.shamovie.media.data.dto.SearchResponseDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -18,12 +19,12 @@ class KtorRemoteMediaDataSource(
 ): RemoteMediaDataSource {
 
     override suspend fun searchMedia(
-        media: String,
+        mediaKey: String,
         query: String
     ): Result<SearchResponseDto, DataError.Remote> {
         return safeCall<SearchResponseDto> {
             httpClient.get(
-                urlString = "$BASE_URL/search/${media}"
+                urlString = "$BASE_URL/search/${mediaKey}"
             ) {
                 parameter("query", query)
                 parameter("api_key", BuildConfig.API_KEY)
@@ -40,6 +41,20 @@ class KtorRemoteMediaDataSource(
             ) {
                 parameter("api_key", BuildConfig.API_KEY)
             }.body()
+        }
+    }
+
+    override suspend fun getMediaDetail(
+        mediaKey: String,
+        id: String
+    ): Result<MediaDetailDto, DataError.Remote> {
+        return safeCall<MediaDetailDto> {
+            httpClient.get(
+                urlString = "$BASE_URL/${mediaKey}/${id}"
+            ) {
+                parameter("append_to_response", "videos")
+                parameter("api_key", BuildConfig.API_KEY)
+            }
         }
     }
 }

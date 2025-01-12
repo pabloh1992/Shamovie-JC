@@ -75,38 +75,53 @@ class DiscoverViewModel(
     private fun getMedia(query: String) {
         viewModelScope.launch {
             mediaRepository.searchMedia(
-                media = state.value.mediaOption.value,
+                mediaKey = state.value.mediaOption.value,
                 query = query
             ).onSuccess { list ->
 
                 if (list.isNotEmpty()) {
                     val media = list.first()
                     Log.d(TAG, "Media discovered result = $media")
-                    media.posterPath?.let { posterPath ->
-                        mediaRepository.getPosterImage(posterPath = posterPath)
-                            .onSuccess { posterByte ->
-                                media.posterDecoded = Base64.encodeToString(posterByte, Base64.DEFAULT)
-                                mediaRepository.insertMedia(media)
-                                _state.update {
-                                    it.copy(
-                                        isListening = false,
-                                        isLoading = false,
-                                        mediaResult = media
-                                    )
+
+                    mediaRepository.getMediaDetail(
+                        mediaKey = state.value.mediaOption.value,
+                        id = media.id.toString()
+                    ).onSuccess { mediaDetail ->
+
+                        Log.d(TAG, "Media detail found = $mediaDetail")
+
+                        mediaDetail.posterPath?.let { posterPath ->
+                            mediaRepository.getPosterImage(posterPath = posterPath)
+                                .onSuccess { posterByte ->
+                                    mediaDetail.posterDecoded = Base64.encodeToString(posterByte, Base64.DEFAULT)
+                                    mediaRepository.insertMedia(mediaDetail)
+                                    _state.update {
+                                        it.copy(
+                                            isListening = false,
+                                            isLoading = false,
+                                            mediaResult = media
+                                        )
+                                    }
                                 }
-                            }
-                            .onError {
-                                media.posterDecoded = null
-                                mediaRepository.insertMedia(media)
-                                _state.update {
-                                    it.copy(
-                                        isListening = false,
-                                        isLoading = false,
-                                        mediaResult = media
-                                    )
+                                .onError {
+                                    mediaDetail.posterDecoded = null
+                                    mediaRepository.insertMedia(mediaDetail)
+                                    _state.update {
+                                        it.copy(
+                                            isListening = false,
+                                            isLoading = false,
+                                            mediaResult = media
+                                        )
+                                    }
                                 }
-                            }
+                        }
+
+
+                    }.onError {
+                        Log.d(TAG, "get media detail error $it")
                     }
+
+
                 } else {
                     _state.update {
                         it.copy(

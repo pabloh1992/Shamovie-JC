@@ -3,8 +3,9 @@ package com.pablodev.shamovie.media.domain
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
 @Serializable
-sealed class MediaResult {
+sealed class MediaDetail {
     abstract val id: Int
     abstract val adult: Boolean
     abstract val originalLanguage: String
@@ -13,6 +14,8 @@ sealed class MediaResult {
     abstract val posterPath: String?
     abstract val voteAverage: Double
     abstract val voteCount: Int
+    abstract val genre: String?
+    abstract val productionCompany: String?
     abstract var posterDecoded: String?
 
     @Serializable
@@ -25,12 +28,18 @@ sealed class MediaResult {
         @SerialName("poster_path") override val posterPath: String?,
         @SerialName("vote_average") override val voteAverage: Double,
         @SerialName("vote_count") override val voteCount: Int,
+        val video: Boolean = false,
+
+        override val genre: String? = null,
+        override val productionCompany: String? = null,
+
         @SerialName("original_title") val originalTitle: String,
-        @SerialName("release_date") val releaseDate: String?,
         val title: String,
-        val video: Boolean,
+        @SerialName("release_date") val releaseDate: String?,
+        val runtime: Int? = null,
+
         override var posterDecoded: String? = null
-    ) : MediaResult()
+    ) : MediaDetail()
 
     @Serializable
     data class TVShow(
@@ -42,9 +51,16 @@ sealed class MediaResult {
         @SerialName("poster_path") override val posterPath: String?,
         @SerialName("vote_average") override val voteAverage: Double,
         @SerialName("vote_count") override val voteCount: Int,
+        @SerialName("origin_country") val originCountry: List<String>? = listOf(),
+        override val genre: String? = null,
+        override val productionCompany: String? = null,
+
         @SerialName("original_name") val originalName: String,
-        @SerialName("first_air_date") val firstAirDate: String?,
         val name: String,
+        @SerialName("first_air_date") val firstAirDate: String?,
+        @SerialName("number_of_seasons") val numberOfSeasons: Int? = null,
+        val status: String? = null,
+
         override var posterDecoded: String? = null
-    ) : MediaResult()
+    ) : MediaDetail()
 }

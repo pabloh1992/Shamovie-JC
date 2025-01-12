@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface MediaRepository {
     suspend fun searchMedia(
-        media: String,
+        mediaKey: String,
         query: String
     ): Result<List<MediaResult>, DataError.Remote>
 
@@ -16,7 +16,14 @@ interface MediaRepository {
         posterPath: String
     ) : Result<ByteArray, DataError.Remote>
 
-    suspend fun insertMedia(media: MediaResult): EmptyResult<DataError.Local>
+    suspend fun getMediaDetail(
+        mediaKey: String,
+        id: String
+    ): Result<MediaDetail, DataError.Remote>
+
+//    suspend fun insertMediaResult(media: MediaResult): EmptyResult<DataError.Local>
+
+    suspend fun insertMedia(media: MediaDetail): EmptyResult<DataError.Local>
 
     fun getMedia(mediaKey: MediaKey): Flow<List<MediaResult>>
 }
