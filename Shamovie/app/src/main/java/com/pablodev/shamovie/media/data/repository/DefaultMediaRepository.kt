@@ -81,7 +81,7 @@ class DefaultMediaRepository(
         }
     }
 
-    override fun getMedia(mediaKey: MediaKey): Flow<List<MediaResult>> {
+    override fun getMediaList(mediaKey: MediaKey): Flow<List<MediaResult>> {
 
         return when (mediaKey) {
             MediaKey.MOVIE -> movieDao.getMovies().map {
@@ -95,6 +95,14 @@ class DefaultMediaRepository(
                     entity.toMediaResult()
                 }
             }
+        }
+    }
+
+    override suspend fun getMediaById(id: String, isMovie: Boolean): MediaDetail? {
+        return if (isMovie) {
+            movieDao.getMovieById(id = id)?.toMediaDetail()
+        } else {
+            tvShowDao.getTvShowById(id = id)?.toMediaDetail()
         }
     }
 }

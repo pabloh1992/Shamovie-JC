@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.pablodev.shamovie.core.util.jsonToMedia
+import com.pablodev.shamovie.media.presentation.detail.DetailViewModel
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
 import com.pablodev.shamovie.screens.DetailScreen
@@ -59,20 +60,22 @@ fun MainNavGraph(
             composable<Route.Details>{ entry ->
                 //val args = entry.toRoute<Route.Details>()
                 val query = entry.arguments?.getString("query")
-                val jsonMedia = entry.arguments?.getString("media")
+                val id = entry.arguments?.getString("mediaId")
                 val isMovie = entry.arguments?.getBoolean("isMovie")
 
-                jsonMedia?.let {
-                    isMovie?.let {
-                        val media = jsonToMedia(jsonMedia, isMovie)
-                        DetailScreen(
-                            query = query,
-                            media = media,
-                            paddingValues = paddingValues
-                        )
+                    id?.let {
+                        isMovie?.let {
+                            DetailScreen(
+                                viewModel = koinViewModel<DetailViewModel>(),
+                                query = query,
+                                id = id,
+                                isMovie = isMovie,
+                                paddingValues = paddingValues
+                            )
+                        }
                     }
                 }
             }
         }
-    }
+
 }

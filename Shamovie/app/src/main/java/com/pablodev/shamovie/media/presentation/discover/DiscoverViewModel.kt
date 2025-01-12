@@ -62,7 +62,7 @@ class DiscoverViewModel(
             is DiscoverAction.ResetResult -> {
                 _state.update {
                     it.copy(
-                        mediaResult = null,
+                        media = null,
                         errorMessage = null,
                         query = null,
                         noResults = false
@@ -99,7 +99,7 @@ class DiscoverViewModel(
                                         it.copy(
                                             isListening = false,
                                             isLoading = false,
-                                            mediaResult = media
+                                            media = mediaDetail
                                         )
                                     }
                                 }
@@ -110,7 +110,7 @@ class DiscoverViewModel(
                                         it.copy(
                                             isListening = false,
                                             isLoading = false,
-                                            mediaResult = media
+                                            media = mediaDetail
                                         )
                                     }
                                 }

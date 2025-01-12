@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,42 +32,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pablodev.shamovie.R
 import com.pablodev.shamovie.core.presentation.toFiveStarRating
 import com.pablodev.shamovie.core.util.toImageBitmap
+import com.pablodev.shamovie.media.domain.MediaDetail
 import com.pablodev.shamovie.media.domain.MediaResult
+import com.pablodev.shamovie.media.presentation.detail.DetailViewModel
 import com.pablodev.shamovie.ui.theme.Gay
 import com.pablodev.shamovie.ui.theme.Hellow
 
 @Composable
 fun DetailScreen(
+    viewModel: DetailViewModel,
     query: String? = null,
-    media: MediaResult,
+    id: String,
+    isMovie: Boolean,
+    //media: MediaDetail,
     paddingValues: PaddingValues
 ) {
 
-    val name: String
-    val createdBy: String
-    val rating: Float
-    val overview: String
-    var posterBitmap: ImageBitmap? = null
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    when(media) {
-        is MediaResult.Movie -> {
-            name = media.title
-            createdBy = media.releaseDate?.take(4) ?: ""
-            rating = media.voteAverage.toFloat()
-            overview = media.overview
-        }
-        is MediaResult.TVShow -> {
-            name = media.name
-            createdBy = media.firstAirDate?.take(4) ?: ""
-            rating = media.voteAverage.toFloat()
-            overview = media.overview
-        }
-    }
-
-    posterBitmap = media.posterDecoded?.toImageBitmap()
+    viewModel.getMediaById(
+        id = id,
+        isMovie = isMovie
+    )
 
     Box(
         modifier = Modifier
@@ -76,6 +67,30 @@ fun DetailScreen(
         contentAlignment = Alignment.TopCenter,
     ) {
 
+        state.media?.let { media ->
+            val name: String
+            val createdBy: String
+            val rating: Float
+            val overview: String
+            var posterBitmap: ImageBitmap? = null
+
+            when (media) {
+                is MediaDetail.Movie -> {
+                    name = media.title
+                    createdBy = media.releaseDate?.take(4) ?: ""
+                    rating = media.voteAverage.toFloat()
+                    overview = media.overview
+                }
+
+                is MediaDetail.TVShow -> {
+                    name = media.name
+                    createdBy = media.firstAirDate?.take(4) ?: ""
+                    rating = media.voteAverage.toFloat()
+                    overview = media.overview
+                }
+            }
+
+            posterBitmap = media.posterDecoded?.toImageBitmap()
 
             Box {
                 posterBitmap?.let {
@@ -121,10 +136,10 @@ fun DetailScreen(
 
 
 
-                        Row (
+                        Row(
                             modifier = Modifier.fillMaxSize()
-                        ){
-                            Column (
+                        ) {
+                            Column(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text(
@@ -146,9 +161,9 @@ fun DetailScreen(
                                     )
                                 )
 
-                                Row (
+                                Row(
                                     modifier = Modifier.padding(top = 2.dp)
-                                ){
+                                ) {
                                     Text(
                                         text = createdBy,
                                         style = TextStyle(
@@ -186,13 +201,13 @@ fun DetailScreen(
                                 )
                             }
 
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_btn_play),
-                                    contentDescription = "Trailer button play",
-                                    modifier = Modifier
-                                        .size(80.dp)
-                                        .padding(top = 12.dp, end = 5.dp)
-                                )
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_btn_play),
+                                contentDescription = "Trailer button play",
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .padding(top = 12.dp, end = 5.dp)
+                            )
 
 
                         }
@@ -212,10 +227,7 @@ fun DetailScreen(
 
                 }
             }
-
-
-
-            }
-
         }
 
+    }
+}

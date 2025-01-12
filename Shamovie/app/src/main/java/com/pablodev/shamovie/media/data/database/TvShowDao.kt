@@ -16,4 +16,8 @@ interface TvShowDao {
 
     @Query("DELETE FROM TvShowEntity WHERE id = :id")
     suspend fun deleteTvShow(id: String)
+
+    @Query("SELECT * FROM TvShowEntity WHERE id = :id LIMIT 1")
+    suspend fun getTvShowById(id: String): TvShowEntity?
+
 }

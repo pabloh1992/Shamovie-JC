@@ -56,7 +56,7 @@ fun TvShowsScreen(
                         navController.navigate(
                             Route.Details(
                                 query = null,
-                                media = it.toJson(),
+                                mediaId = it.id.toString(),
                                 isMovie = it is MediaResult.Movie
                             )
                         )

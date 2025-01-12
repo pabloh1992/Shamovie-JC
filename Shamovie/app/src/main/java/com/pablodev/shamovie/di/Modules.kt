@@ -8,6 +8,7 @@ import com.pablodev.shamovie.media.data.network.KtorRemoteMediaDataSource
 import com.pablodev.shamovie.media.data.network.RemoteMediaDataSource
 import com.pablodev.shamovie.media.data.repository.DefaultMediaRepository
 import com.pablodev.shamovie.media.domain.MediaRepository
+import com.pablodev.shamovie.media.presentation.detail.DetailViewModel
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
 import io.ktor.client.engine.cio.CIO
@@ -51,5 +52,7 @@ val modules = module {
     viewModel(named("tv")) {
         MediaListViewModel(get(), MediaKey.TV_SHOW)
     }
+
+    viewModelOf(::DetailViewModel)
 
 }

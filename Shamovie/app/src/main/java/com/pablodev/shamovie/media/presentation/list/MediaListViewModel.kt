@@ -1,6 +1,5 @@
 package com.pablodev.shamovie.media.presentation.list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pablodev.shamovie.core.util.MediaKey
@@ -51,7 +50,7 @@ class MediaListViewModel(
 
     fun getMedia() {
         viewModelScope.launch {
-            mediaRepository.getMedia(mediaKey).collect { list ->
+            mediaRepository.getMediaList(mediaKey).collect { list ->
                 _state.update {
                     it.copy(
                         mediaList = list
@@ -64,7 +63,7 @@ class MediaListViewModel(
     private fun observeMovieList() {
         observeMovieListJob?.cancel()
         observeMovieListJob = mediaRepository
-            .getMedia(mediaKey)
+            .getMediaList(mediaKey)
             .onEach { list ->
                 _state.update {
                     it.copy(

@@ -26,6 +26,6 @@ sealed interface Route {
     data class Details(
         val query: String? = null,
         val isMovie: Boolean,
-        val media: String  // Encode and Decode
+        val mediaId: String  // Encode and Decode
     ): Route
 }

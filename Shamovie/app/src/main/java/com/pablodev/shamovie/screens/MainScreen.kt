@@ -44,7 +44,7 @@ fun MainScreen( ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute: String? = navBackStackEntry?.destination?.route
 
-    Log.d(TAG, "Navigaation - current route $currentRoute")
+    Log.d(TAG, "Navigation - current route $currentRoute")
 
     val snackbarHostState = remember {
         SnackbarHostState()

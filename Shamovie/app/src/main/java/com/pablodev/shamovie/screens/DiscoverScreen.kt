@@ -2,8 +2,6 @@ package com.pablodev.shamovie.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,16 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.pablodev.shamovie.core.presentation.RadioButtonGroup
 import com.pablodev.shamovie.core.presentation.ShamovieButton
 import com.pablodev.shamovie.core.presentation.SnackbarAction
 import com.pablodev.shamovie.core.presentation.SnackbarController
 import com.pablodev.shamovie.core.presentation.SnackbarEvent
 import com.pablodev.shamovie.core.util.MediaKey
-import com.pablodev.shamovie.core.util.toJson
-import com.pablodev.shamovie.media.domain.MediaResult
+import com.pablodev.shamovie.media.domain.MediaDetail
 import com.pablodev.shamovie.media.presentation.discover.DiscoverAction
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.navigation.Route
@@ -122,14 +117,14 @@ fun DiscoverScreen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
-            state.mediaResult?.let { media ->
+            state.media?.let { media ->
                 state.query?.let { query ->
 
                     navController.navigate(
                         Route.Details(
                             query = query,
-                            media = media.toJson(),
-                            isMovie = true
+                            mediaId = media.id.toString(),
+                            isMovie = media is MediaDetail.Movie
                         )
                     )
                     viewModel.onAction(DiscoverAction.ResetResult)

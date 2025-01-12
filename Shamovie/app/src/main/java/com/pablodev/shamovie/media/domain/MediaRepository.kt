@@ -25,5 +25,8 @@ interface MediaRepository {
 
     suspend fun insertMedia(media: MediaDetail): EmptyResult<DataError.Local>
 
-    fun getMedia(mediaKey: MediaKey): Flow<List<MediaResult>>
+    fun getMediaList(mediaKey: MediaKey): Flow<List<MediaResult>>
+
+    suspend fun getMediaById(id: String, isMovie: Boolean): MediaDetail?
+
 }
