@@ -129,7 +129,7 @@ fun DiscoverScreen(
                         Route.Details(
                             query = query,
                             media = media.toJson(),
-                            isMovie = media is MediaResult.Movie
+                            isMovie = true
                         )
                     )
                     viewModel.onAction(DiscoverAction.ResetResult)

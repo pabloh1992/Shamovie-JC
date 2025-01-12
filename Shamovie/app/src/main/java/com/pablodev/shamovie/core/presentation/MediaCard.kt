@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -74,7 +75,10 @@ fun MediaCard(
         )
     }
 
-    Box {
+    Box (
+        modifier = Modifier
+            .clickable { onMediaClick(media) }
+    ){
         Column {
             Box(
                 modifier = Modifier

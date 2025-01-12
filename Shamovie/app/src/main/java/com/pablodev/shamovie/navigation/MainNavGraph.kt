@@ -67,7 +67,8 @@ fun MainNavGraph(
                         val media = jsonToMedia(jsonMedia, isMovie)
                         DetailScreen(
                             query = query,
-                            media = media
+                            media = media,
+                            paddingValues = paddingValues
                         )
                     }
                 }

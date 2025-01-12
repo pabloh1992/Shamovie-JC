@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.pablodev.shamovie.core.presentation.ObserveAsEvents
 import com.pablodev.shamovie.core.presentation.SnackbarController
 import com.pablodev.shamovie.navigation.BottomNavItems
@@ -70,9 +71,13 @@ fun MainScreen( ) {
         }
     }
 
+    SetSystemBarsColor(
+        color = if (currentRoute?.contains("Detail") == true)
+            Color.Black else Color.Transparent
+    )
+
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
     ) {
         Scaffold(
             bottomBar = {
@@ -139,4 +144,21 @@ fun BottomNavigationBar(navController: NavController) {
                 )
             }
         }
+}
+
+@Composable
+fun SetSystemBarsColor(color: Color) {
+    val systemUiController = rememberSystemUiController()
+
+    // Set status bar and navigation bar to black
+    systemUiController.setSystemBarsColor(
+        color = color,
+        darkIcons = false
+    )
+
+    systemUiController.setNavigationBarColor(
+        color = Color.Black,
+        darkIcons = false
+    )
+
 }

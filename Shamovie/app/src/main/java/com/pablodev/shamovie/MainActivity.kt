@@ -37,6 +37,7 @@ class MainActivity : ComponentActivity() {
             requestMicrophonePermission()
         }
 
+
         setContent {
             ShamovieTheme {
                 RootNavGraph()
