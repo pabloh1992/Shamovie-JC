@@ -17,6 +17,7 @@ kotlinSerialization = "1.7.3"
 navigationComposeVersion = "2.8.5"
 constraintlayout = "1.1.0"
 media3CommonKtx = "1.5.1"
+media-player-compose="1.0.29"
 ksp = "2.0.20-1.0.24"
 sqlite = "2.5.0-alpha11"
 room = "2.7.0-alpha11"
@@ -60,6 +61,8 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationComposeVersion" }
 constraintlayout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintlayout" }
 androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtx" }
+
+chaintech-media-player = { group="network.chaintech", name="compose-multiplatform-media-player", version.ref="media-player-compose"}
 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }

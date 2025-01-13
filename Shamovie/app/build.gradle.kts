@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.constraintlayout.compose)
     implementation(libs.androidx.media3.common.ktx)
+    implementation(libs.chaintech.media.player)
     implementation(libs.androidx.room.runtime)
     implementation(libs.sqlite.bundled)
     ksp(libs.androidx.room.compiler)

@@ -26,7 +26,13 @@ data class DetailViewModel(
 
     fun onAction(action: DetailAction) {
         when (action) {
-            DetailAction.OnTrailerClick -> {}
+            DetailAction.OnTrailerClick -> {
+                _state.update {
+                    it.copy(
+                        isTrailerPlaying = !state.value.isTrailerPlaying
+                    )
+                }
+            }
         }
     }
 
@@ -44,5 +50,4 @@ data class DetailViewModel(
             }
         }
     }
-
 }
