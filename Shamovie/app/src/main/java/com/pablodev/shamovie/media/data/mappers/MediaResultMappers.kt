@@ -18,8 +18,7 @@ fun SearchedResultDto.toMediaResult(): MediaResult {
             voteCount = voteCount,
             originalTitle = originalTitle ?: "",
             releaseDate = releaseDate,
-            title = title ?: "",
-            video = video ?: false
+            title = title ?: ""
         )
     } else {
         MediaResult.TVShow(
@@ -51,7 +50,6 @@ fun MovieEntity.toMediaResult(): MediaResult.Movie {
         originalTitle = this.originalTitle,
         releaseDate = this.releaseDate,
         title = this.title,
-        video = this.video,
         posterDecoded = this.posterDecoded
     )
 }

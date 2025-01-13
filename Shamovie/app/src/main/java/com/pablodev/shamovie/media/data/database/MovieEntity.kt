@@ -13,9 +13,9 @@ data class MovieEntity(
     val posterPath: String?,
     val voteAverage: Double,
     val voteCount: Int,
-    val video: Boolean,
     val genre: String?,
     val productionCompany: String?,
+    val videoTrailerId: String?,
 
     val originalTitle: String,
     val releaseDate: String?,

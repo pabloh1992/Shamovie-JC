@@ -28,7 +28,6 @@ sealed class MediaResult {
         @SerialName("original_title") val originalTitle: String,
         @SerialName("release_date") val releaseDate: String?,
         val title: String,
-        val video: Boolean,
         override var posterDecoded: String? = null
     ) : MediaResult()
 

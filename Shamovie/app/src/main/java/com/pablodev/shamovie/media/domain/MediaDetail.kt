@@ -16,6 +16,7 @@ sealed class MediaDetail {
     abstract val voteCount: Int
     abstract val genre: String?
     abstract val productionCompany: String?
+    abstract val videoTrailerId: String?
     abstract var posterDecoded: String?
 
     @Serializable
@@ -28,10 +29,9 @@ sealed class MediaDetail {
         @SerialName("poster_path") override val posterPath: String?,
         @SerialName("vote_average") override val voteAverage: Double,
         @SerialName("vote_count") override val voteCount: Int,
-        val video: Boolean = false,
-
         override val genre: String? = null,
         override val productionCompany: String? = null,
+        override val videoTrailerId: String? = null,
 
         @SerialName("original_title") val originalTitle: String,
         val title: String,
@@ -54,6 +54,7 @@ sealed class MediaDetail {
         @SerialName("origin_country") val originCountry: List<String>? = listOf(),
         override val genre: String? = null,
         override val productionCompany: String? = null,
+        override val videoTrailerId: String? = null,
 
         @SerialName("original_name") val originalName: String,
         val name: String,

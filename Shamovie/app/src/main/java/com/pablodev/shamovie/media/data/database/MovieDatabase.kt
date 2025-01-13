@@ -18,7 +18,7 @@ abstract class MovieDatabase: RoomDatabase() {
     abstract val tvShowDao: TvShowDao
 
     companion object {
-        const val DB_MOVIE = "media.db"
+        const val DB_MOVIE = "shamovie.db"
     }
 }
 

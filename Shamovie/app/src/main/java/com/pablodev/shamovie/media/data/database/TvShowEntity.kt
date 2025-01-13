@@ -15,6 +15,7 @@ data class TvShowEntity (
     val voteCount: Int,
     val genre: String?,
     val productionCompany: String?,
+    val videoTrailerId: String?,
 
     val originalName: String,
     val firstAirDate: String?,

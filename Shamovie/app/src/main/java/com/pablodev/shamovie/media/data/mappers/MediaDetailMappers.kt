@@ -3,6 +3,7 @@ package com.pablodev.shamovie.media.data.mappers
 import com.pablodev.shamovie.media.data.database.MovieEntity
 import com.pablodev.shamovie.media.data.database.TvShowEntity
 import com.pablodev.shamovie.media.data.dto.MediaDetailDto
+import com.pablodev.shamovie.media.data.dto.getTrailerId
 import com.pablodev.shamovie.media.domain.MediaDetail
 import com.pablodev.shamovie.media.domain.MediaResult
 
@@ -19,11 +20,11 @@ fun MediaDetailDto.toMediaDetail(): MediaDetail {
             voteCount = voteCount,
             genre = genres?.firstOrNull()?.name.orEmpty(),
             productionCompany = productionCompanies?.firstOrNull()?.name.orEmpty(),
+            videoTrailerId = videos?.getTrailerId(),
             originalTitle = originalTitle.orEmpty(),
             title = title.orEmpty(),
             releaseDate = releaseDate,
             runtime = runtime,
-            video = video ?: false,
             posterDecoded = null
         )
     } else {
@@ -39,6 +40,7 @@ fun MediaDetailDto.toMediaDetail(): MediaDetail {
             originCountry = originCountry,
             genre = genres?.firstOrNull()?.name.orEmpty(),
             productionCompany = productionCompanies?.firstOrNull()?.name.orEmpty(),
+            videoTrailerId = videos?.getTrailerId(),
             originalName = originalName.orEmpty(),
             name = name.orEmpty(),
             firstAirDate = firstAirDate,
@@ -60,9 +62,9 @@ fun MediaDetail.toMovieEntity(): MovieEntity {
             posterPath = this.posterPath,
             voteAverage = this.voteAverage,
             voteCount = this.voteCount,
-            video = this.video,
             genre = this.genre,
             productionCompany = this.productionCompany,
+            videoTrailerId = this.videoTrailerId,
 
             title = this.title,
             originalTitle = this.originalTitle,
@@ -89,6 +91,7 @@ fun MediaDetail.toTvShowEntity(): TvShowEntity {
             voteCount = this.voteCount,
             genre = this.genre,
             productionCompany = this.productionCompany,
+            videoTrailerId = this.videoTrailerId,
 
             originalName = this.originalName,
             firstAirDate = this.firstAirDate,
@@ -114,12 +117,12 @@ fun MovieEntity.toMediaDetail(): MediaDetail.Movie {
         voteAverage = this.voteAverage,
         voteCount = this.voteCount,
         genre = this.genre,
-        productionCompany = productionCompany,
+        productionCompany = this.productionCompany,
+        videoTrailerId =this.videoTrailerId,
 
         originalTitle = this.originalTitle,
         releaseDate = this.releaseDate,
         title = this.title,
-        video = this.video,
         runtime = this.runtime,
 
         posterDecoded = this.posterDecoded
@@ -138,6 +141,7 @@ fun TvShowEntity.toMediaDetail(): MediaDetail.TVShow {
         voteCount = this.voteCount,
         genre = this.genre,
         productionCompany = this.productionCompany,
+        videoTrailerId =this.videoTrailerId,
 
         originalName = this.originalName,
         firstAirDate = this.firstAirDate,

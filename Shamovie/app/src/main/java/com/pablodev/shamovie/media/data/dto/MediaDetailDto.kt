@@ -11,7 +11,6 @@ data class MediaDetailDto(
     val overview: String = "",
     val popularity: Double = 0.0,
     @SerialName("poster_path") val posterPath: String?,
-    val video: Boolean? = null,
     @SerialName("vote_average") val voteAverage: Double = 0.0,
     @SerialName("vote_count") val voteCount: Int = 0,
     @SerialName("origin_country") val originCountry: List<String>? = null,
@@ -28,6 +27,7 @@ data class MediaDetailDto(
     @SerialName("first_air_date") val firstAirDate: String? = null, // For TV shows
     @SerialName("number_of_seasons") val numberOfSeasons: Int? = null, // For TV shows
     val status: String? = null, // For TV shows
+    val videos: VideosDto? = null
 )
 
 @Serializable

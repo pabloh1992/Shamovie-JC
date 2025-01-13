@@ -107,25 +107,27 @@ fun DetailScreen(
                     }
 
                     // Gradient overlay
-                    if (!state.isTrailerPlaying) {
-                        Column {
-                            Spacer(modifier = Modifier.height(250.dp))
-                            Box(
-                                modifier = Modifier
-                                    .height(350.dp)
-                                    .fillMaxWidth()
-                                    .background(
-                                        brush = Brush.verticalGradient(
-                                            colors = listOf(
-                                                Color.Transparent, // Transparent at the top
-                                                Color.Black.copy(alpha = 0.8f), // Almost black in the middle
-                                                Color.Black // Completely black at the end
-                                            ),
-                                            startY = 0f,
-                                            endY = Float.POSITIVE_INFINITY // Ensure gradient covers the height
+                    state.media?.videoTrailerId?.let {
+                        if (!state.isTrailerPlaying) {
+                            Column {
+                                Spacer(modifier = Modifier.height(250.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .height(350.dp)
+                                        .fillMaxWidth()
+                                        .background(
+                                            brush = Brush.verticalGradient(
+                                                colors = listOf(
+                                                    Color.Transparent, // Transparent at the top
+                                                    Color.Black.copy(alpha = 0.8f), // Almost black in the middle
+                                                    Color.Black // Completely black at the end
+                                                ),
+                                                startY = 0f,
+                                                endY = Float.POSITIVE_INFINITY // Ensure gradient covers the height
+                                            )
                                         )
-                                    )
-                            )
+                                )
+                            }
                         }
                     }
 
@@ -232,12 +234,14 @@ fun DetailScreen(
                     }
 
                     // Youtube Player
-                    if (state.isTrailerPlaying) {
-                        YouTubePlayerComposable(
-                            modifier = Modifier
-                                .height(520.dp),
-                            videoId = "MOD50EoFqdg"
-                        )
+                    state.media?.videoTrailerId?.let { videoId ->
+                        if (state.isTrailerPlaying) {
+                            YouTubePlayerComposable(
+                                modifier = Modifier
+                                    .height(520.dp),
+                                videoId = videoId
+                            )
+                        }
                     }
                 }
             }
