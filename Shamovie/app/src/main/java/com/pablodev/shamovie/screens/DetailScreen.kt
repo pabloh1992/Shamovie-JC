@@ -61,7 +61,6 @@ fun DetailScreen(
     query: String? = null,
     id: String,
     isMovie: Boolean,
-    paddingValues: PaddingValues
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()

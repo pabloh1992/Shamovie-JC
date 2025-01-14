@@ -81,7 +81,7 @@ fun MainScreen( ) {
     ) {
         Scaffold(
             bottomBar = {
-                if (currentRoute?.contains("Detail") == false)
+                if (currentRoute?.contains("Detail") == false && !currentRoute.contains("Search"))
                     BottomNavigationBar(navController)
             },
             snackbarHost = {

@@ -9,9 +9,11 @@ import androidx.navigation.compose.navigation
 import com.pablodev.shamovie.media.presentation.detail.DetailViewModel
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
+import com.pablodev.shamovie.media.presentation.search.SearchViewModel
 import com.pablodev.shamovie.screens.DetailScreen
 import com.pablodev.shamovie.screens.DiscoverScreen
 import com.pablodev.shamovie.screens.MoviesScreen
+import com.pablodev.shamovie.screens.SearchScreen
 import com.pablodev.shamovie.screens.TvShowsScreen
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.qualifier.named
@@ -30,7 +32,7 @@ fun MainNavGraph(
             startDestination = Route.Discover
         ) {
 
-            composable<Route.MovieList>{
+            composable<Route.MovieList> {
                 MoviesScreen(
                     viewModel = koinViewModel<MediaListViewModel>
                         (named("movie")),
@@ -39,7 +41,7 @@ fun MainNavGraph(
                 )
             }
 
-            composable<Route.Discover>{
+            composable<Route.Discover> {
                 DiscoverScreen(
                     viewModel = koinViewModel<DiscoverViewModel>(),
                     navController = navController,
@@ -47,7 +49,7 @@ fun MainNavGraph(
                 )
             }
 
-            composable<Route.TvShowList>{
+            composable<Route.TvShowList> {
                 TvShowsScreen(
                     viewModel = koinViewModel<MediaListViewModel>
                         (named("tv")),
@@ -56,26 +58,35 @@ fun MainNavGraph(
                 )
             }
 
-            composable<Route.Details>{ entry ->
+            composable<Route.Details> { entry ->
                 //val args = entry.toRoute<Route.Details>()
                 val query = entry.arguments?.getString("query")
                 val id = entry.arguments?.getString("mediaId")
                 val isMovie = entry.arguments?.getBoolean("isMovie")
 
-                    id?.let {
-                        isMovie?.let {
-                            DetailScreen(
-                                viewModel = koinViewModel<DetailViewModel>(),
-                                navController = navController,
-                                query = query,
-                                id = id,
-                                isMovie = isMovie,
-                                paddingValues = paddingValues
-                            )
-                        }
+                id?.let {
+                    isMovie?.let {
+                        DetailScreen(
+                            viewModel = koinViewModel<DetailViewModel>(),
+                            navController = navController,
+                            query = query,
+                            id = id,
+                            isMovie = isMovie
+                        )
                     }
                 }
             }
-        }
 
+            composable<Route.Search> { entry ->
+                val query = entry.arguments?.getString("query")
+
+                SearchScreen(
+                    viewModel = koinViewModel<SearchViewModel>(),
+                    navController = navController,
+                    query = query
+                )
+            }
+
+        }
+    }
 }

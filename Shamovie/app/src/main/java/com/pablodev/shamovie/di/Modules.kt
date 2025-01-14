@@ -11,6 +11,7 @@ import com.pablodev.shamovie.media.domain.MediaRepository
 import com.pablodev.shamovie.media.presentation.detail.DetailViewModel
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
+import com.pablodev.shamovie.media.presentation.search.SearchViewModel
 import io.ktor.client.engine.cio.CIO
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModel
@@ -54,5 +55,6 @@ val modules = module {
     }
 
     viewModelOf(::DetailViewModel)
+    viewModelOf(::SearchViewModel)
 
 }

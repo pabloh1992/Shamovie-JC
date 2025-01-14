@@ -1,6 +1,5 @@
 package com.pablodev.shamovie.navigation
 
-import com.pablodev.shamovie.media.domain.MediaResult
 import kotlinx.serialization.Serializable
 
 sealed interface Route {
@@ -26,6 +25,10 @@ sealed interface Route {
     data class Details(
         val query: String? = null,
         val isMovie: Boolean,
-        val mediaId: String  // Encode and Decode
+        val mediaId: String
+    ): Route
+    @Serializable
+    data class Search(
+        val query: String? = null
     ): Route
 }
