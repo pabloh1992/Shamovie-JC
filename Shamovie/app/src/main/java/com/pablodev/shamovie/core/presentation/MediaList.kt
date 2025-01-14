@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.pablodev.shamovie.R
 import com.pablodev.shamovie.media.domain.MediaResult
 
 
@@ -18,7 +17,8 @@ fun MediaList(
     mediaList: List<MediaResult>,
     onMediaClick: (MediaResult) -> Unit,
     modifier: Modifier = Modifier,
-    scrollState: LazyListState = rememberLazyListState()
+    scrollState: LazyListState = rememberLazyListState(),
+    isSearchResult: Boolean = false
 ) {
     LazyColumn(
         modifier = modifier,
@@ -30,12 +30,13 @@ fun MediaList(
             items = mediaList,
             key = { it.id }
         ) { media ->
-            MediaCard(
+            MediaItem(
                 media = media,
                 onMediaClick = {
                     onMediaClick(media)
                 },
-                isSelected = false
+                isSelected = false,
+                isSearchResult = isSearchResult
             )
         }
     }

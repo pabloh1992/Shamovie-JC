@@ -80,6 +80,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.jetbrains.compose.navigation)
     implementation(libs.bundles.ktor)
+    implementation(libs.bundles.coil)
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.android)

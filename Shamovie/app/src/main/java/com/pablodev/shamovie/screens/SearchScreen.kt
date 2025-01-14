@@ -206,8 +206,11 @@ fun SearchScreen(
                                                         )
                                                     )
                                                 },
-                                                modifier = Modifier.fillMaxSize(),
-                                                scrollState = searchResultsListState
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .padding(bottom = 64.dp),
+                                                scrollState = searchResultsListState,
+                                                isSearchResult = true
                                             )
                                         }
                                     }
@@ -233,8 +236,11 @@ fun SearchScreen(
                                                 )
                                             )
                                         },
-                                        modifier = Modifier.fillMaxSize(),
-                                        scrollState = searchResultsListState
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(bottom = 48.dp),
+                                        scrollState = searchResultsListState,
+                                        isSearchResult = true
                                     )
                                 }
                             }
