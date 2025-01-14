@@ -39,6 +39,8 @@ import com.pablodev.shamovie.media.presentation.detail.DetailAction
 import com.pablodev.shamovie.media.presentation.detail.DetailViewModel
 import com.pablodev.shamovie.ui.theme.Gay
 import com.pablodev.shamovie.ui.theme.Hellow
+import com.pablodev.shamovie.ui.theme.ShowCanceled
+import com.pablodev.shamovie.ui.theme.ShowEnded
 
 @Composable
 fun DetailScreen(
@@ -46,7 +48,6 @@ fun DetailScreen(
     query: String? = null,
     id: String,
     isMovie: Boolean,
-    //media: MediaDetail,
     paddingValues: PaddingValues
 ) {
 
@@ -67,7 +68,6 @@ fun DetailScreen(
 
         state.media?.let { media ->
             val name: String
-            val createdBy: String
             val rating: Float
             val overview: String
             var posterBitmap: ImageBitmap? = null
@@ -75,14 +75,12 @@ fun DetailScreen(
             when (media) {
                 is MediaDetail.Movie -> {
                     name = media.title
-                    createdBy = media.releaseDate?.take(4) ?: ""
                     rating = media.voteAverage.toFloat()
                     overview = media.overview
                 }
 
                 is MediaDetail.TVShow -> {
                     name = media.name
-                    createdBy = media.firstAirDate?.take(4) ?: ""
                     rating = media.voteAverage.toFloat()
                     overview = media.overview
                 }
@@ -157,44 +155,12 @@ fun DetailScreen(
                                     )
                                 )
 
-                                Text(
-                                    modifier = Modifier.padding(top = 2.dp),
-                                    text = "Company",
-                                    style = TextStyle(
-                                        color = Hellow,
-                                        fontSize = 15.sp,
-                                    )
-                                )
 
-                                Row(
-                                    modifier = Modifier.padding(top = 2.dp)
-                                ) {
-                                    Text(
-                                        text = createdBy,
-                                        style = TextStyle(
-                                            color = Gay,
-                                            fontSize = 15.sp,
-                                        )
-                                    )
-
-                                    Text(
-                                        modifier = Modifier.padding(start = 10.dp, end = 10.dp),
-                                        text = "status",
-                                        style = TextStyle(
-                                            color = Gay,
-                                            fontSize = 15.sp,
-                                        ),
-                                    )
-
-                                    Text(
-                                        text = "duration",
-                                        style = TextStyle(
-                                            color = Gay,
-                                            fontSize = 15.sp,
-                                        )
-                                    )
-
+                                when (media) {
+                                    is MediaDetail.Movie -> MovieDetail(media)
+                                    is MediaDetail.TVShow -> TvShowDetail(media)
                                 }
+
 
                                 Text(
                                     modifier = Modifier.padding(top = 2.dp),
@@ -247,4 +213,109 @@ fun DetailScreen(
             }
         }
     }
+}
+
+@Composable
+fun MovieDetail(
+    movie: MediaDetail.Movie
+) {
+
+    Column {
+        Text(
+            modifier = Modifier.padding(top = 2.dp),
+            text = movie.productionCompany ?: "",
+            style = TextStyle(
+                color = Hellow,
+                fontSize = 15.sp,
+            )
+        )
+    }
+
+    Row(
+        modifier = Modifier.padding(top = 2.dp)
+    ) {
+        Text(
+            text = movie.releaseDate?.take(4) ?: "",
+            style = TextStyle(
+                color = Gay,
+                fontSize = 15.sp,
+            )
+        )
+
+        Text(
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp),
+            text = movie.genre ?: "",
+            style = TextStyle(
+                color = Gay,
+                fontSize = 15.sp,
+            ),
+        )
+
+        Text(
+            text = movie.runtime?.toMinutes() ?: "",
+            style = TextStyle(
+                color = Gay,
+                fontSize = 15.sp,
+            )
+        )
+
+    }
+}
+
+@Composable
+fun TvShowDetail(
+    tvShow: MediaDetail.TVShow
+) {
+
+    Column {
+        Row(
+            modifier = Modifier.padding(top = 2.dp)
+        ) {
+            Text(
+                text = tvShow.productionCompany ?: "",
+                style = TextStyle(
+                    color = Hellow,
+                    fontSize = 15.sp,
+                )
+            )
+
+            Text(
+                modifier = Modifier.padding(start = 10.dp, end = 10.dp),
+                text = tvShow.firstAirDate?.take(4) ?: "",
+                style = TextStyle(
+                    color = Gay,
+                    fontSize = 15.sp,
+                ),
+            )
+
+            // ['Returning Series', 'Planned', 'In Production', 'Ended', 'Canceled', 'Pilot']
+            Text(
+                text = tvShow.status ?: "",
+                style = TextStyle(
+                    color = when (tvShow.status) {
+                        "Ended" -> ShowEnded
+                        "Canceled" -> ShowCanceled
+                        else -> Hellow
+                    },
+                    fontSize = 15.sp,
+                )
+            )
+
+        }
+    }
+
+    Text(
+        modifier = Modifier.padding(top = 2.dp),
+        text = tvShow.numberOfSeasons?.let {"Seasons: $it"} ?: "",
+        style = TextStyle(
+            color = Gay,
+            fontSize = 15.sp,
+        )
+    )
+}
+
+fun Int.toMinutes(): String {
+    val hours = this / 60
+    val remainingMinutes = this % 60
+    return "${hours}h ${remainingMinutes}m"
 }
