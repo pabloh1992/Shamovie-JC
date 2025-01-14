@@ -118,17 +118,15 @@ fun DiscoverScreen(
             }
 
             state.media?.let { media ->
-                state.query?.let { query ->
-
-                    navController.navigate(
-                        Route.Details(
-                            query = query,
-                            mediaId = media.id.toString(),
-                            isMovie = media is MediaDetail.Movie
-                        )
+                navController.navigate(
+                    Route.Details(
+                        query = state.query,
+                        mediaId = media.id.toString(),
+                        isMovie = media is MediaDetail.Movie
                     )
-                    viewModel.onAction(DiscoverAction.ResetResult)
-                }
+                )
+                viewModel.onAction(DiscoverAction.ResetResult)
+
             }
 
             state.errorMessage?.let { error ->

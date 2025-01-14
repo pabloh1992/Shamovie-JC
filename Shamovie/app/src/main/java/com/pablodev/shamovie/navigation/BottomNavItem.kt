@@ -14,7 +14,7 @@ sealed class BottomNavItems(
     )
 
     data object Discover : BottomNavItems(
-        title = "Discover",
+        title = "Home",
         route = Route.Discover,
         iconResource = R.drawable.ic_mic
     )

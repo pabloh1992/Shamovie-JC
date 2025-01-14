@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.pablodev.shamovie.core.util.jsonToMedia
 import com.pablodev.shamovie.media.presentation.detail.DetailViewModel
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
@@ -67,6 +66,7 @@ fun MainNavGraph(
                         isMovie?.let {
                             DetailScreen(
                                 viewModel = koinViewModel<DetailViewModel>(),
+                                navController = navController,
                                 query = query,
                                 id = id,
                                 isMovie = isMovie,
