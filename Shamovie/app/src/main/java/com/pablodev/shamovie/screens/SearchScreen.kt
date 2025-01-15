@@ -40,10 +40,8 @@ import com.pablodev.shamovie.core.presentation.MediaList
 import com.pablodev.shamovie.core.presentation.MediaSearchBar
 import com.pablodev.shamovie.media.domain.MediaResult
 import com.pablodev.shamovie.media.presentation.search.SearchAction
-import com.pablodev.shamovie.media.presentation.search.SearchState
 import com.pablodev.shamovie.media.presentation.search.SearchViewModel
 import com.pablodev.shamovie.navigation.Route
-import com.pablodev.shamovie.ui.theme.BackgroundColor
 import com.pablodev.shamovie.ui.theme.Gay
 import com.pablodev.shamovie.ui.theme.Greenish
 import com.pablodev.shamovie.ui.theme.Orangish
@@ -226,7 +224,7 @@ fun SearchScreen(
                                     )
                                 } else {
                                     MediaList(
-                                        mediaList = state.movieResults,
+                                        mediaList = state.tvShowsResults,
                                         onMediaClick = {
                                             navController.navigate(
                                                 Route.Details(

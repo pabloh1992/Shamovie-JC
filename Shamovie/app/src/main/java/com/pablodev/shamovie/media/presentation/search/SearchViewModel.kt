@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.pablodev.shamovie.core.domain.onError
 import com.pablodev.shamovie.core.domain.onSuccess
 import com.pablodev.shamovie.core.presentation.toUiText
+import com.pablodev.shamovie.core.util.MediaKey
 import com.pablodev.shamovie.media.domain.MediaRepository
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -26,7 +27,9 @@ data class SearchViewModel (
 
     private val TAG = "SearchViewModel"
 
-    private var searchJob: Job? = null
+    private var searchJobMovie: Job? = null
+    private var searchJobTv: Job? = null
+
 
     private val _state = MutableStateFlow(SearchState())
     val state = _state
@@ -54,6 +57,7 @@ data class SearchViewModel (
                     it.copy(selectedTabIndex = action.index)
                 }
             }
+            else -> {}
         }
     }
 
@@ -75,15 +79,17 @@ data class SearchViewModel (
                     }
 
                     query.length >= 2 -> {
-                        searchJob?.cancel()
-                        searchJob = searchMedia(query)
+                        searchJobMovie?.cancel()
+                        searchJobMovie = searchMedia(query, MediaKey.MOVIE)
+                        searchJobTv?.cancel()
+                        searchJobTv = searchMedia(query, MediaKey.TV_SHOW)
                     }
                 }
             }
             .launchIn(viewModelScope)
     }
 
-    private fun searchMedia(query: String) = viewModelScope.launch {
+    private fun searchMedia(query: String, mediaKey: MediaKey) = viewModelScope.launch {
         _state.update {
             it.copy(
                 isLoading = true
@@ -91,16 +97,27 @@ data class SearchViewModel (
         }
         mediaRepository
             .searchMedia(
-                mediaKey = "movie",
+                mediaKey = mediaKey.value,
                 query = query
             )
             .onSuccess { mediaResults ->
-                _state.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        movieResults = mediaResults
-                    )
+
+                if(mediaKey == MediaKey.MOVIE) {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = null,
+                            movieResults = mediaResults
+                        )
+                    }
+                } else {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = null,
+                            tvShowsResults = mediaResults
+                        )
+                    }
                 }
             }
             .onError { error ->
