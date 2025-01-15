@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import com.google.gson.GsonBuilder
 import com.pablodev.shamovie.media.domain.MediaDetail
 import com.pablodev.shamovie.media.domain.MediaResult
+import com.pablodev.shamovie.media.presentation.detail.OriginRoute
 
 
 fun MediaResult.toJson(): String {
@@ -59,3 +60,16 @@ fun String.toImageBitmap(): ImageBitmap {
     )
     return posterBitmap.asImageBitmap()
 }
+
+fun OriginRoute.toJson(): String {
+    val gson = GsonBuilder().create()
+    return gson.toJson(this, OriginRoute::class.java)
+}
+
+fun jsonToOriginRoute(json: String): OriginRoute {
+    val gson = GsonBuilder().create()
+    return gson.fromJson(json, OriginRoute::class.java)
+}
+
+fun ByteArray.toDecodedString(): String
+    = Base64.encodeToString(this, Base64.DEFAULT)

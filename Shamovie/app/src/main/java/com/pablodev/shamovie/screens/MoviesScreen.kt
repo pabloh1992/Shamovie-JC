@@ -16,6 +16,7 @@ import androidx.navigation.NavHostController
 import com.pablodev.shamovie.core.presentation.MediaList
 import com.pablodev.shamovie.core.util.toJson
 import com.pablodev.shamovie.media.domain.MediaResult
+import com.pablodev.shamovie.media.presentation.detail.OriginRoute
 import com.pablodev.shamovie.media.presentation.list.MediaListAction
 import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
 import com.pablodev.shamovie.navigation.Route
@@ -50,7 +51,8 @@ fun MoviesScreen (
                             Route.Details(
                                 query = null,
                                 mediaId = it.id.toString(),
-                                isMovie = it is MediaResult.Movie
+                                isMovie = it is MediaResult.Movie,
+                                originRoute = OriginRoute.LIST.toJson()
                             )
                         )
 

@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.pablodev.shamovie.core.util.jsonToOriginRoute
 import com.pablodev.shamovie.media.presentation.detail.DetailViewModel
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.media.presentation.list.MediaListViewModel
@@ -63,16 +64,20 @@ fun MainNavGraph(
                 val query = entry.arguments?.getString("query")
                 val id = entry.arguments?.getString("mediaId")
                 val isMovie = entry.arguments?.getBoolean("isMovie")
+                val jsonOriginRoute = entry.arguments?.getString("originRoute")
 
                 id?.let {
                     isMovie?.let {
-                        DetailScreen(
-                            viewModel = koinViewModel<DetailViewModel>(),
-                            navController = navController,
-                            query = query,
-                            id = id,
-                            isMovie = isMovie
-                        )
+                        jsonOriginRoute?.let {
+                            DetailScreen(
+                                viewModel = koinViewModel<DetailViewModel>(),
+                                navController = navController,
+                                query = query,
+                                id = id,
+                                isMovie = isMovie,
+                                originRoute = jsonToOriginRoute(jsonOriginRoute)
+                            )
+                        }
                     }
                 }
             }

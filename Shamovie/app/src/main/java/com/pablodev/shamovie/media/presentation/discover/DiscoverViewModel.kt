@@ -8,6 +8,7 @@ import com.pablodev.shamovie.core.domain.onError
 import com.pablodev.shamovie.core.domain.onSuccess
 import com.pablodev.shamovie.core.presentation.UiText
 import com.pablodev.shamovie.core.presentation.toUiText
+import com.pablodev.shamovie.core.util.toDecodedString
 import com.pablodev.shamovie.media.domain.MediaRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -93,7 +94,7 @@ class DiscoverViewModel(
                         mediaDetail.posterPath?.let { posterPath ->
                             mediaRepository.getPosterImage(posterPath = posterPath)
                                 .onSuccess { posterByte ->
-                                    mediaDetail.posterDecoded = Base64.encodeToString(posterByte, Base64.DEFAULT)
+                                    mediaDetail.posterDecoded = posterByte.toDecodedString()
                                     mediaRepository.insertMedia(mediaDetail)
                                     _state.update {
                                         it.copy(

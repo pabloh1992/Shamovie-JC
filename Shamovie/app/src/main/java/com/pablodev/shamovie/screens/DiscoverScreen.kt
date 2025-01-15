@@ -41,7 +41,9 @@ import com.pablodev.shamovie.core.presentation.SnackbarAction
 import com.pablodev.shamovie.core.presentation.SnackbarController
 import com.pablodev.shamovie.core.presentation.SnackbarEvent
 import com.pablodev.shamovie.core.util.MediaKey
+import com.pablodev.shamovie.core.util.toJson
 import com.pablodev.shamovie.media.domain.MediaDetail
+import com.pablodev.shamovie.media.presentation.detail.OriginRoute
 import com.pablodev.shamovie.media.presentation.discover.DiscoverAction
 import com.pablodev.shamovie.media.presentation.discover.DiscoverViewModel
 import com.pablodev.shamovie.navigation.Route
@@ -160,7 +162,8 @@ fun DiscoverScreen(
                         Route.Details(
                             query = state.query,
                             mediaId = media.id.toString(),
-                            isMovie = media is MediaDetail.Movie
+                            isMovie = media is MediaDetail.Movie,
+                            originRoute = OriginRoute.DISCOVER.toJson()
                         )
                     )
                     viewModel.onAction(DiscoverAction.ResetResult)

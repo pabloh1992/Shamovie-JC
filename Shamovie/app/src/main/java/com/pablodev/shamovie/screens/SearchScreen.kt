@@ -38,7 +38,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.pablodev.shamovie.core.presentation.MediaList
 import com.pablodev.shamovie.core.presentation.MediaSearchBar
+import com.pablodev.shamovie.core.util.toJson
 import com.pablodev.shamovie.media.domain.MediaResult
+import com.pablodev.shamovie.media.presentation.detail.OriginRoute
 import com.pablodev.shamovie.media.presentation.search.SearchAction
 import com.pablodev.shamovie.media.presentation.search.SearchViewModel
 import com.pablodev.shamovie.navigation.Route
@@ -200,7 +202,8 @@ fun SearchScreen(
                                                         Route.Details(
                                                             query = null,
                                                             mediaId = it.id.toString(),
-                                                            isMovie = it is MediaResult.Movie
+                                                            isMovie = it is MediaResult.Movie,
+                                                            originRoute = OriginRoute.SEARCH.toJson()
                                                         )
                                                     )
                                                 },
@@ -230,7 +233,8 @@ fun SearchScreen(
                                                 Route.Details(
                                                     query = null,
                                                     mediaId = it.id.toString(),
-                                                    isMovie = it is MediaResult.Movie
+                                                    isMovie = it is MediaResult.Movie,
+                                                    originRoute = OriginRoute.SEARCH.toJson()
                                                 )
                                             )
                                         },

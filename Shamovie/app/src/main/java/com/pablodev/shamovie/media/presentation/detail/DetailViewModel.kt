@@ -2,14 +2,12 @@ package com.pablodev.shamovie.media.presentation.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pablodev.shamovie.core.presentation.toUiText
+import com.pablodev.shamovie.core.domain.onError
+import com.pablodev.shamovie.core.domain.onSuccess
+import com.pablodev.shamovie.core.util.toDecodedString
 import com.pablodev.shamovie.media.domain.MediaRepository
-import com.pablodev.shamovie.media.presentation.list.MediaListAction
-import com.pablodev.shamovie.media.presentation.list.MediaListState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -18,8 +16,6 @@ data class DetailViewModel(
 ) : ViewModel() {
 
     private val TAG = "DetailViewModel"
-
-    private var observeMovieListJob: Job? = null
 
     private val _state = MutableStateFlow(DetailState())
     val state = _state
@@ -43,10 +39,66 @@ data class DetailViewModel(
                 isMovie = isMovie
             )
 
-            _state.update {
-                it.copy(
-                    media = media
-                )
+            media?.let { m ->
+                _state.update {
+                    it.copy(
+                        media = m
+                    )
+                }
+            } ?: run {
+
+                _state.update {
+                    it.copy(
+                        isLoading = true
+                    )
+                }
+
+                mediaRepository.getMediaDetail(
+                    mediaKey = if (isMovie) "movie" else "tv",
+                    id = id
+                ).onSuccess { md ->
+
+                    md.posterPath?.let { posterPath ->
+                        mediaRepository.getPosterImage(
+                            posterPath = posterPath
+                        ).onSuccess { posterBytes ->
+                            md.posterDecoded = posterBytes.toDecodedString()
+
+                            state.update {
+                                it.copy(
+                                    isLoading = false,
+                                    media = md
+                                )
+                            }
+
+
+                        }.onError {
+
+                            state.update {
+                                it.copy(
+                                    isLoading = false,
+                                    media = md
+                                )
+                            }
+                        }
+                    } ?: run {
+
+                        state.update {
+                            it.copy(
+                                isLoading = false,
+                                media = null
+                            )
+                        }
+
+                    }
+                }.onError {
+                    state.update {
+                        it.copy(
+                            isLoading = false,
+                            media = null
+                        )
+                    }
+                }
             }
         }
     }

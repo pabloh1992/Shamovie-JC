@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,10 +47,13 @@ import com.pablodev.shamovie.core.util.toImageBitmap
 import com.pablodev.shamovie.media.domain.MediaDetail
 import com.pablodev.shamovie.media.presentation.detail.DetailAction
 import com.pablodev.shamovie.media.presentation.detail.DetailViewModel
+import com.pablodev.shamovie.media.presentation.detail.OriginRoute
 import com.pablodev.shamovie.ui.theme.Gay
 import com.pablodev.shamovie.ui.theme.Hellow
+import com.pablodev.shamovie.ui.theme.Orangish
 import com.pablodev.shamovie.ui.theme.ShowCanceled
 import com.pablodev.shamovie.ui.theme.ShowEnded
+import com.pablodev.shamovie.ui.theme.Whity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -61,6 +64,7 @@ fun DetailScreen(
     query: String? = null,
     id: String,
     isMovie: Boolean,
+    originRoute: OriginRoute
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -93,6 +97,7 @@ fun DetailScreen(
             )
         }
     ) {
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -100,42 +105,60 @@ fun DetailScreen(
             contentAlignment = Alignment.TopCenter,
         ) {
 
-            state.media?.let { media ->
-                val name: String
-                val rating: Float
-                val overview: String
-                var posterBitmap: ImageBitmap? = null
+            if (state.isLoading) {
+                CircularProgressIndicator(
+                    color = Whity,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            } else {
+                state.media?.let { media ->
+                    val name: String
+                    val rating: Float
+                    val overview: String
+                    var posterBitmap: ImageBitmap? = null
 
-                when (media) {
-                    is MediaDetail.Movie -> {
-                        name = media.title
-                        rating = media.voteAverage.toFloat()
-                        overview = media.overview
+                    when (media) {
+                        is MediaDetail.Movie -> {
+                            name = media.title
+                            rating = media.voteAverage.toFloat()
+                            overview = media.overview
+                        }
+
+                        is MediaDetail.TVShow -> {
+                            name = media.name
+                            rating = media.voteAverage.toFloat()
+                            overview = media.overview
+                        }
                     }
 
-                    is MediaDetail.TVShow -> {
-                        name = media.name
-                        rating = media.voteAverage.toFloat()
-                        overview = media.overview
-                    }
-                }
+                    posterBitmap = media.posterDecoded?.toImageBitmap()
 
-                posterBitmap = media.posterDecoded?.toImageBitmap()
-
-                Box {
-                    posterBitmap?.let {
+                    Box {
 
                         // Poster image
                         if (!state.isTrailerPlaying) {
-                            Image(
-                                bitmap = it,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .height(600.dp)
-                                    .fillMaxWidth()
-                                    .padding(bottom = 16.dp),
-                                contentScale = ContentScale.Fit
-                            )
+                            posterBitmap?.let {
+                                Image(
+                                    bitmap = it,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .height(600.dp)
+                                        .fillMaxWidth()
+                                        .padding(bottom = 16.dp),
+                                    contentScale = ContentScale.Fit
+                                )
+
+                            } ?: run {
+                                Image(
+                                    painter = painterResource(id = R.drawable.poster_not_available),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .height(600.dp)
+                                        .fillMaxWidth()
+                                        .padding(bottom = 16.dp),
+                                    contentScale = ContentScale.Fit
+                                )
+                            }
                         }
 
                         // Gradient overlay
@@ -248,6 +271,7 @@ fun DetailScreen(
             }
         }
     }
+    
 }
 
 @Composable
